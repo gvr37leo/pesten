@@ -149,11 +149,9 @@ class GameManager{
     incrementTurn(count){
         this.getGame().turnindex = (this.getGame().turnindex + count) % this.getPlayers().length
     }
-
-    
     
     chooseHouse(player:Player,cb:(house:House) => void){
-        this.eventQueue.startDiscovery('discovery',Object.values(House),(data) => {
+        this.eventQueue.startDiscovery('discoverhouse',Object.values(House),(data) => {
             cb(data)
         })
     }

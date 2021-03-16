@@ -19,10 +19,6 @@
 
 
 
-var screensize = new Vector(document.documentElement.clientWidth,document.documentElement.clientHeight)
-var crret = createCanvas(screensize.x,screensize.y)
-var canvas = crret.canvas
-var ctxt = crret.ctxt
 
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;
