@@ -16,15 +16,14 @@ class CardComp extends React.Component{
 
     props:{
         card:Card
+        onClick?
     }
 
-    constructor(props){
-        super(props)
-    }
+    clicked = new EventSystem()
 
     render(){
         return (
-            <div>
+            <div onClick={this.props.onClick}>
                 <img src="" alt=""/>
                 <div>
                     <div>{this.props.card.rank}</div>

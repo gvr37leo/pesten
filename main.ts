@@ -23,12 +23,17 @@
 
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;
+var appel = document.querySelector('#app');
 
 gamemanager.setupListeners()
+gamemanager.eventQueue.onProcessFinished.listen(() => {
+    var jsx = renderHomepage()
+    ReactDOM.render(jsx, appel)
+})
 gamemanager.eventQueue.addAndTrigger('gamestart', null)
 
-var jsx = renderHomepage()
-ReactDOM.render(jsx, document.querySelector('#app'))
+
+
 
 
 
