@@ -20,11 +20,7 @@
 //updates to librarys
 //discovery in eventqueue
 //bugfix in eventsystem
-// var houses = {
-//     spades:{},
-//     clubs:{},
 
-// }
 
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;

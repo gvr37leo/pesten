@@ -25,11 +25,11 @@ class GameManager{
             add(new Player({name:'dante'}),players)
 
             var deck = add(new Entity({name:'deck'}), game)
-            for(var house of Enum2Array(House)){
-                for(var rank of Enum2Array(Rank)){
+            for(var house of Object.values(houseMap)){
+                for(var rank of Object.values(rankMap)){
                     add(new Card({
-                        rank:rank as any,
-                        house:house as any,
+                        rank:rank,
+                        house:house,
                     }), deck)
                 }   
             }
@@ -53,8 +53,8 @@ class GameManager{
             }
             
             return topcard.house == card.house ||
-            topcard.rank == card.rank ||
-            topcard.rank == Rank.jack ||
+            topcard.rank.name == card.rank.name ||
+            topcard.rank.name == 'jack' ||
             topcard.isJoker
         })
 
@@ -68,7 +68,7 @@ class GameManager{
             var hand = currentplayer.descendants(e => e.type == 'card') as Card[]
             if(hand.length == 1){
                 var lastcard = hand[0]
-                var isSpecialcard = [Rank.two,Rank.seven,Rank.eight,Rank.jack].indexOf(lastcard.rank) != -1 || lastcard.isJoker
+                var isSpecialcard = ['two','seven','eight','jack'].indexOf(lastcard.rank.name) != -1 || lastcard.isJoker
                 return isSpecialcard == false
             }
             
@@ -84,11 +84,11 @@ class GameManager{
             if(currentplayer._children(e => true).length == 0){
                 this.eventQueue.addAndTrigger('gamewon', null)
             }else{
-                if(card.rank == Rank.seven){
+                if(card.rank.name == 'seven'){
                     //nothing happens besides moving card to discard pile, just play again
-                }else if(card.rank == Rank.eight){
+                }else if(card.rank.name == 'eight'){
                     this.incrementTurn(2)
-                }else if(card.rank == Rank.jack){
+                }else if(card.rank.name == 'jack'){
                     //show 4 housoptions
                     this.chooseHouse(currentplayer, house => {
                         this.getGame().currentHouse = house
@@ -112,7 +112,7 @@ class GameManager{
                     this.getGame().currentHouse = house
                 })
 
-            }else if(topcard.rank == Rank.two){
+            }else if(topcard.rank.name == 'two'){
                 this.drawCard(currentplayer,2)
                 this.incrementTurn(1)
             }

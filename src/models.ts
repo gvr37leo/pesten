@@ -1,5 +1,37 @@
-enum Rank{two,three,four,five,six,seven,eight,nine,ten,jack,queen,king,ace}
-enum House{spades,clubs,diamonds,hearts}
+class Rank{
+    constructor(public name:string){
+
+    }
+}
+
+class House{
+    constructor(public name:string, public color:string){
+
+    }
+}
+
+var rankMap = {
+    two:new Rank('two'),
+    three:new Rank('three'),
+    four:new Rank('four'),
+    five:new Rank('five'),
+    six:new Rank('six'),
+    seven:new Rank('seven'),
+    eight:new Rank('eight'),
+    nine:new Rank('nine'),
+    ten:new Rank('ten'),
+    jack:new Rank('jack'),
+    queen:new Rank('queen'),
+    king:new Rank('king'),
+    ace:new Rank('ace'),
+}
+
+var houseMap = {
+    spades:new House('spades','black'),
+    clubs:new House('clubs','black'),
+    diamonds:new House('diamonds','red'),
+    hearts:new House('hearts','red'),
+}
 
 class Entity{
     id:number = -1
@@ -97,8 +129,8 @@ class Card extends Entity{
     }
 
     isJoker:boolean = false
-    rank:Rank = Rank.ace
-    house:House = House.clubs
+    rank:Rank = rankMap.two
+    house:House = houseMap.clubs
 
 }
 
