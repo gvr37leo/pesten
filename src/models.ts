@@ -80,6 +80,7 @@ function storeAdd(store:Store<Entity>){
 class Game extends Entity{
     turnindex:number = 0
     currentHouse:House
+    shownPlayer:Player
 
     constructor(){
         super()

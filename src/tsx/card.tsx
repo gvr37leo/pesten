@@ -1,16 +1,3 @@
-function RenderCard(props:{card:Card}){
-    
-
-    return (
-        <div>
-            <img src="" alt=""/>
-            <div>
-                <div>{props.card.rank}</div>
-                <div>{props.card.house}</div>
-            </div>
-        </div>
-    )
-}
 
 class CardComp extends React.Component{
 
@@ -19,13 +6,11 @@ class CardComp extends React.Component{
         onClick?
     }
 
-    clicked = new EventSystem()
 
     render(){
         return (
-            <div onClick={this.props.onClick}>
-                <img src="" alt=""/>
-                <div>
+            <div style={{border:"1px solid black", padding:"10px", margin:"40px"}} onClick={this.props.onClick}>
+                <div style={{display:"flex"}}>
                     <div>{this.props.card.rank}</div>
                     <div>{this.props.card.house}</div>
                 </div>
