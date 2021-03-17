@@ -11,37 +11,38 @@ class GameManager{
     setupListeners(){
         
         this.eventQueue.listen('gamestart',() => {
+            this.entityStore = new Store<Entity>()
+            globalEntityStore = this.entityStore
             var add = storeAdd(this.entityStore)
 
             var game = add(new Game(),null)
             this.root = game
-            this.entityStore = new Store<Entity>()
-            globalEntityStore = this.entityStore
             var discardPile = add(new Entity({name:'discardpile'}),game)
-
-            var players = add(new Entity(),game)
+            var players = add(new Entity({name:'players'}),game)
             add(new Player({name:'amy'}),players)
             add(new Player({name:'bob'}),players)
             add(new Player({name:'carl'}),players)
             add(new Player({name:'dante'}),players)
 
-            var deck = add(new Entity(), game)
-            for(var house = 0; house < 4;house++){
-                for(var rank = 0; rank < 12; rank++){
+            var deck = add(new Entity({name:'deck'}), game)
+            for(var house of Enum2Array(House)){
+                for(var rank of Enum2Array(Rank)){
                     add(new Card({
-                        rank:rank,
-                        house:house,
+                        rank:rank as any,
+                        house:house as any,
                     }), deck)
-                }
+                }   
             }
+
             add(new Card({isJoker:true}), deck)
             add(new Card({isJoker:true}), deck)
 
             shuffle(this.getDeckCards()).forEach((card,i) => card.sortorder = i)
             var shuffleddeck = this.getDeckCards()
             for(var player of this.getPlayers()){
-                shuffleddeck.slice(0,5).forEach(card => card.setParent(player))
+                shuffleddeck.splice(0,5).forEach(card => card.setParent(player))
             }
+            shuffleddeck.splice(0,1)[0].setParent(discardPile)
         })
         
         this.eventQueue.addRule('playcard','cards house or rank need to match or the card has to be a jack or joker',(card:Card) => {
@@ -138,7 +139,7 @@ class GameManager{
 
     getCurrentPlayer():Player{
         var game = this.getGame()
-        var players = game.descendant(e => e.name == 'players') as unknown as Player[]
+        var players = this.getPlayers()
         return players[game.turnindex % players.length]
     }
 
@@ -181,4 +182,8 @@ class GameManager{
         return this.getPlayersNode()._children(e => true) as Player[]
     }
 
+}
+
+function Enum2Array(en:any){
+    return Object.values(en).filter(val => typeof val  == "number")
 }

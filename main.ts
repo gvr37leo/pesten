@@ -12,22 +12,29 @@
 /// <reference path="libs/utils/camera.ts" />
 /// <reference path="src/models.ts" />
 /// <reference path="src/gamemanager.ts" />
+/// <reference path="src/tsx/person.tsx" />
+/// <reference path="src/tsx/card.tsx" />
+/// <reference path="src/tsx/homepage.tsx" />
+
 
 //updates to librarys
 //discovery in eventqueue
 //bugfix in eventsystem
 
-
-
-
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;
+
 gamemanager.setupListeners()
 gamemanager.eventQueue.addAndTrigger('gamestart', null)
 
-var players = gamemanager.getPlayers()
-var currentplayer = gamemanager.getCurrentPlayer()
-gamemanager.eventQueue.addAndTrigger('playcard', currentplayer.child(e => true))
+var jsx = renderHomepage()
+ReactDOM.render(jsx, document.querySelector('#app'))
+
+
+
+// var players = gamemanager.getPlayers()
+// var currentplayer = gamemanager.getCurrentPlayer()
+// gamemanager.eventQueue.addAndTrigger('playcard', currentplayer.child(e => true))
 
 // loop((dt) => {
 //     ctxt.clearRect(0,0,screensize.x,screensize.y)

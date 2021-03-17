@@ -18,14 +18,20 @@ class Entity{
     setChild(child:Entity){
         //remove child from old parent
         var oldparent = globalEntityStore.get(child.parent)
-        oldparent.children.delete(child.id)
+        if(oldparent != null){
+            oldparent.children.delete(child.id)
+        }
         this.children.add(child.id)
         child.parent = this.id
         child.sortorder = this.ordercount++
     }
 
     setParent(parent:Entity){
-        parent.setChild(this)
+        if(parent == null){
+            this.parent = null
+        }else{
+            parent.setChild(this)
+        }
     }
 
     descendant(cb:(ent:Entity) => boolean):Entity{
