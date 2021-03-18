@@ -12,7 +12,7 @@
 /// <reference path="libs/utils/camera.ts" />
 /// <reference path="src/models.ts" />
 /// <reference path="src/gamemanager.ts" />
-/// <reference path="src/tsx/person.tsx" />
+/// <reference path="src/tsx/player.tsx" />
 /// <reference path="src/tsx/card.tsx" />
 /// <reference path="src/tsx/homepage.tsx" />
 
@@ -28,12 +28,16 @@ var appel = document.querySelector('#app');
 
 gamemanager.setupListeners()
 gamemanager.eventQueue.onProcessFinished.listen(() => {
-    var jsx = renderHomepage()
-    ReactDOM.render(jsx, appel)
+    updateHtml()
 })
 gamemanager.eventQueue.addAndTrigger('gamestart', null)
 
 
+
+function updateHtml(){
+    var jsx = renderHomepage()
+    ReactDOM.render(jsx, appel)
+}
 
 
 

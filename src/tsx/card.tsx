@@ -10,7 +10,7 @@ class CardComp extends React.Component{
     render(){
         var card = this.props.card
         return (
-            <div className="card" style={{border:"1px solid black", padding:"10px", margin:"40px", cursor:'pointer'}} onClick={this.props.onClick}>
+            <div className="card" style={{border:"1px solid black", padding:"10px", margin:"40px", cursor:this.props.onClick != null ? 'pointer' : 'default'}} onClick={this.props.onClick}>
                 <div style={{display:"flex"}}>
                     {(() => {
                         if(card.isJoker){

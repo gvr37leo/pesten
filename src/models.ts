@@ -66,6 +66,10 @@ class Entity{
         }
     }
 
+    getParent(){
+        return globalEntityStore.get(this.parent)
+    }
+
     descendant(cb:(ent:Entity) => boolean):Entity{
         return this.descendants(cb)[0]
 
@@ -113,6 +117,7 @@ class Game extends Entity{
     turnindex:number = 0
     currentHouse:House
     shownPlayer:Player
+    bullycounter = 0
 
     constructor(){
         super()
@@ -129,7 +134,7 @@ class Card extends Entity{
     }
 
     isJoker:boolean = false
-    rank:Rank = rankMap.two
+    rank:Rank = rankMap.three
     house:House = houseMap.clubs
 
 }
