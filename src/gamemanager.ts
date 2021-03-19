@@ -31,12 +31,13 @@ class GameManager{
                     add(new Card({
                         rank:rank,
                         house:house,
+                        url:`./resources/${rank.abbr+house.abbr}.jpg`
                     }), deck)
                 }   
             }
 
-            add(new Card({isJoker:true}), deck)
-            add(new Card({isJoker:true}), deck)
+            add(new Card({isJoker:true,url:`./resources/joker.jpg`}), deck)
+            add(new Card({isJoker:true,url:`./resources/joker.jpg`}), deck)
 
             shuffle(this.getDeckCards()).forEach((card,i) => card.sortorder = i)
             var shuffleddeck = this.getDeckCards()
@@ -44,11 +45,13 @@ class GameManager{
                 shuffleddeck.splice(0,5).forEach(card => card.setParent(player))
             }
             shuffleddeck.splice(0,1)[0].setParent(discardPile)
+            this.getGame().currentHouse = this.getTopCardDiscardPile().house
         })
         
         this.eventQueue.addRule('playcard','its not your turn',(card:Card) => {
             return this.getCurrentPlayer().id == card.getParent().id
         })
+
 
         this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(card:Card) => {
             if(this.getGame().bullycounter > 0){
@@ -58,17 +61,18 @@ class GameManager{
             }
         })
 
-        this.eventQueue.addRule('playcard','cards house or rank needs to match the top card or the card has to be a jack or joker',(card:Card) => {
+        this.eventQueue.addRule('playcard','cards house or rank needs to match or the top card has to be a jack or joker',(card:Card) => {
 
             var topcard = this.getTopCardDiscardPile()
+            
             if(topcard == null){
                 return true
             }
             
-            return topcard.house.name == card.house.name ||
+            return this.getGame().currentHouse.name == card.house.name ||
             topcard.rank.name == card.rank.name ||
             card.rank.name == 'jack' ||
-            card.isJoker
+            card.isJoker || topcard.isJoker 
         })
 
         this.eventQueue.addRule('playcard','final card may not be a special card',(card:Card) => {
@@ -127,10 +131,7 @@ class GameManager{
 
             if(topcard.isJoker){
                 this.drawCards(currentplayer, game.bullycounter)
-                this.chooseHouse(currentplayer, house => {
-                    topcard.house = house
-                })
-
+                //dont have to choose a house, any card may be put on top of a joker
             }else if(topcard.rank.name == 'two'){
                 this.drawCards(currentplayer, game.bullycounter)
                 this.incrementTurn(1)
@@ -138,14 +139,19 @@ class GameManager{
             game.bullycounter = 0
         })
 
+        this.eventQueue.addRule('pass',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,() => {
+            return this.getGame().bullycounter == 0
+        })
         this.eventQueue.listen('pass',() => {
             this.drawCards(this.getCurrentPlayer(),1)
             this.incrementTurn(1)
         })
 
         this.eventQueue.listenDiscovery('discoverhouse',(data,cb) => {
-            var game = this.getGame()
-            // game.modal.options = data
+            var currentplayer = this.getCurrentPlayer()
+            currentplayer.isDiscoveringHouse = true
+            currentplayer.houseOptions = data
+            currentplayer.discoverCb = cb
         })
 
         this.eventQueue.listen('gamewon',() => {
@@ -197,7 +203,7 @@ class GameManager{
     }
     
     chooseHouse(player:Player,cb:(house:House) => void){
-        this.eventQueue.startDiscovery('discoverhouse',Object.values(House),(data) => {
+        this.eventQueue.startDiscovery('discoverhouse',Object.values(houseMap),(data) => {
             cb(data)
         })
     }

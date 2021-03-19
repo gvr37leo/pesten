@@ -1,3 +1,4 @@
+declare var toastr:any
 
 class EventQueue{
     idcounter = 0
@@ -57,6 +58,7 @@ class EventQueue{
                     listener.cb(currentEvent.data)
                 }
             }else{
+                toastr.error(first(brokenrules).error)
                 console.log(first(brokenrules).error)
             }
         }

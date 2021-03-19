@@ -15,6 +15,7 @@
 /// <reference path="src/tsx/player.tsx" />
 /// <reference path="src/tsx/card.tsx" />
 /// <reference path="src/tsx/homepage.tsx" />
+/// <reference path="src/tsx/modal.tsx" />
 
 
 //updates to librarys
@@ -25,7 +26,6 @@
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;
 var appel = document.querySelector('#app');
-
 gamemanager.setupListeners()
 gamemanager.eventQueue.onProcessFinished.listen(() => {
     updateHtml()
@@ -34,11 +34,12 @@ gamemanager.eventQueue.addAndTrigger('gamestart', null)
 
 
 
+
+
 function updateHtml(){
     var jsx = renderHomepage()
     ReactDOM.render(jsx, appel)
 }
-
 
 
 
