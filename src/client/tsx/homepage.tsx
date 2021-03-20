@@ -23,7 +23,7 @@ function renderHomepage(){
 
                         {(() => {
                             if(game.bullycounter > 0){
-                                return <div style={{cursor:'pointer', border:'1px solid black', margin:'40px', padding:'10px'}} onClick={() => {
+                                return <div style={{cursor:'pointer', border:'1px solid white', margin:'40px', padding:'10px'}} onClick={() => {
                                     gamemanager.eventQueue.addAndTrigger('acceptcards', null)
                                 }}>accept cards {game.bullycounter}</div>
                             }else{
@@ -31,7 +31,7 @@ function renderHomepage(){
                             }
                         })()}
 
-                        <div style={{cursor:'pointer', border:'1px solid black', margin:'40px', padding:'10px'}} onClick={() => {
+                        <div style={{cursor:'pointer', border:'1px solid white', margin:'40px', padding:'10px'}} onClick={() => {
                             gamemanager.eventQueue.addAndTrigger('pass',null)
                         }}>
                             <div>draw a card and pass</div>
@@ -40,7 +40,7 @@ function renderHomepage(){
                         <CardComp card={topcard} />
                     </div>
                 </div>
-                <div style={{display:"flex", justifyContent:"start", overflow:"auto", margin:"20px"}}>
+                <div style={{display:"flex", justifyContent:"start", overflow:"auto", margin:"20px", border:"1px solid white"}}>
                     {currentplayercards.map((c:Card) => <CardComp onClick={() => {
                         gamemanager.eventQueue.addAndTrigger('playcard',c)
                     }} key={c.id} card={c} />)}

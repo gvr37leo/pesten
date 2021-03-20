@@ -10,18 +10,23 @@
 /// <reference path="libs/event/eventqueue.ts" />
 /// <reference path="libs/event/eventsystem.ts" />
 /// <reference path="libs/utils/camera.ts" />
-/// <reference path="src/models.ts" />
-/// <reference path="src/gamemanager.ts" />
-/// <reference path="src/tsx/player.tsx" />
-/// <reference path="src/tsx/card.tsx" />
-/// <reference path="src/tsx/homepage.tsx" />
-/// <reference path="src/tsx/modal.tsx" />
+/// <reference path="src/shared/models.ts" />
+/// <reference path="src/server/gamemanager.ts" />
+/// <reference path="src/client/tsx/player.tsx" />
+/// <reference path="src/client/tsx/card.tsx" />
+/// <reference path="src/client/tsx/homepage.tsx" />
+/// <reference path="src/client/tsx/modal.tsx" />
+/// <reference path="src/client/client.ts" />
+/// <reference path="src/server/server.ts" />
+
 
 
 //updates to librarys
 //discovery in eventqueue
 //bugfix in eventsystem
-
+var server = new Server()
+var client1 = new Client()
+var client2 = new Client()
 
 var gamemanager = new GameManager()
 var globalEntityStore = gamemanager.entityStore;

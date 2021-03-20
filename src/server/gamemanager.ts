@@ -158,6 +158,7 @@ class GameManager{
             for(var player of this.getPlayers()){
                 if(player._children(e => true).length == 0){
                     console.log(player.name)
+                    toastr.success(`${player.name} won the game`)
                 }
             }
         })
