@@ -1,12 +1,13 @@
 class Server{
+    gamemanager: GameManager;
 
     constructor(){
-        var gamemanager = new GameManager()
-        var globalEntityStore = gamemanager.entityStore;
+        this.gamemanager = new GameManager()
+        var globalEntityStore = this.gamemanager.entityStore;
 
-        gamemanager.setupListeners()
-        gamemanager.eventQueue.onProcessFinished.listen(() => {
-            updateHtml()
+        this.gamemanager.setupListeners()
+        this.gamemanager.eventQueue.onProcessFinished.listen(() => {
+            
         })
         // gamemanager.eventQueue.addAndTrigger('gamestart', null)
     }
@@ -21,5 +22,20 @@ class Server{
 
     send(msgtype,data){
 
+    }
+
+    serialize(){
+        return JSON.stringify(this.gamemanager.entityStore.list())
+    }
+
+    deserialize(entities:any[]){
+        var store = new Store<Entity>()
+        
+        for(var entity of entities){
+            entity.prototype = Entity
+            store.add(entity)
+        }
+
+        return store
     }
 }
