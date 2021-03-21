@@ -27,25 +27,19 @@
 var server = new Server()
 var client1 = new Client()
 var client2 = new Client()
+client1.connect(server)
+client2.connect(server)
+var currentclient = client1
 
-var gamemanager = new GameManager()
-var globalEntityStore = gamemanager.entityStore;
 var appel = document.querySelector('#app');
-gamemanager.setupListeners()
-gamemanager.eventQueue.onProcessFinished.listen(() => {
-    updateHtml()
-})
-gamemanager.eventQueue.addAndTrigger('gamestart', null)
+
+ReactDOM.render(currentclient.root, appel)
 
 
-
-
-
-function updateHtml(){
-    var jsx = renderHomepage()
-    ReactDOM.render(jsx, appel)
-}
-
+//todo
+//sync up entities client/server
+//send messages between them
+//update discovery to work with messages instead of cb
 
 
 // var players = gamemanager.getPlayers()
