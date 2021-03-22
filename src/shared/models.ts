@@ -34,11 +34,13 @@ var houseMap = {
 }
 
 class Entity{
+    static globalEntityStore:Store<Entity>
+
     id:number = -1
     parent:number = -1
     type:string = ''
     name:string =''
-    children = new Set<number>()
+    children:number[] = []
     ordercount = 0
     sortorder = 0
 
@@ -49,11 +51,11 @@ class Entity{
 
     setChild(child:Entity){
         //remove child from old parent
-        var oldparent = globalEntityStore.get(child.parent)
+        var oldparent = Entity.globalEntityStore.get(child.parent)
         if(oldparent != null){
-            oldparent.children.delete(child.id)
+            remove(oldparent.children,child.id)
         }
-        this.children.add(child.id)
+        this.children.push(child.id)
         child.parent = this.id
         child.sortorder = this.ordercount++
     }
@@ -67,7 +69,7 @@ class Entity{
     }
 
     getParent(){
-        return globalEntityStore.get(this.parent)
+        return Entity.globalEntityStore.get(this.parent)
     }
 
     descendant(cb:(ent:Entity) => boolean):Entity{
@@ -86,14 +88,14 @@ class Entity{
     }
 
     _children(cb:(ent:Entity) => boolean):Entity[]{
-        return Array.from(this.children.values()).map(id => globalEntityStore.get(id)).filter(cb).sort((a,b) => a.sortorder - b.sortorder)
+        return this.children.map(id => Entity.globalEntityStore.get(id)).filter(cb).sort((a,b) => a.sortorder - b.sortorder)
     }
 
 
     ancestor(cb:(ent:Entity) => boolean):Entity{
         var current:Entity = this
         while(current != null && cb(current) == false){
-            current = globalEntityStore.get(current.parent)
+            current = Entity.globalEntityStore.get(current.parent)
         }
         return current
     }
@@ -116,7 +118,7 @@ function storeAdd(store:Store<Entity>){
 class Game extends Entity{
     turnindex:number = 0
     currentHouse:House
-    shownPlayer:Player
+    shownPlayerid:number
     bullycounter = 0
 
     constructor(){

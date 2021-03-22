@@ -25,16 +25,47 @@
 //discovery in eventqueue
 //bugfix in eventsystem
 var server = new Server()
-var client1 = new Client()
-var client2 = new Client()
-client1.connect(server)
-client2.connect(server)
-var currentclient = client1
+
+var clients = [new Client(),new Client()]
+var currentclientI = 0
+
+server.output.listen((e) => {
+    clients[0].input(e.type,e.data)
+    clients[1].input(e.type,e.data)
+    renderHTML()
+    
+})
+
+clients[0].output.listen(e => {
+    server.input(e.type,e.data)
+})
+
+clients[1].output.listen(e => {
+    server.input(e.type,e.data)
+})
 
 var appel = document.querySelector('#app');
+server.input('init',{})
+server.input('playerjoin',{name:'amy'})
+server.input('playerjoin',{name:'bob'})
+server.input('playerjoin',{name:'carl'})
+server.input('playerjoin',{name:'dante'})
 
-ReactDOM.render(currentclient.root, appel)
+server.input('gamestart',{})
 
+
+
+
+function renderHTML(){
+    ReactDOM.render(clients[currentclientI].root, appel)
+}
+
+document.addEventListener('keydown',e => {
+    if(e.key =='q'){
+        currentclientI = (currentclientI + 1) % clients.length
+        renderHTML()
+    }
+})
 
 //todo
 //sync up entities client/server

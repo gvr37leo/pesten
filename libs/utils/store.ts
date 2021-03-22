@@ -13,6 +13,11 @@ class Store<T>{
         return item
     }
 
+    insert(item:T){
+        this.map.set((item as any).id,item)
+        return item
+    }
+
     list(){
         return Array.from(this.map.values())
     }

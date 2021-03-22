@@ -1,6 +1,6 @@
 
-function RenderPlayer(props:{player:Player, onClick?}){
-    var currentplayer = gamemanager.getCurrentPlayer()
+function RenderPlayer(props:{player:Player, client:Client, onClick?}){
+    var currentplayer = props.client.helper.getCurrentPlayer()
     
     var bordercolor = 'white'
     if(currentplayer.id == props.player.id){
@@ -9,7 +9,7 @@ function RenderPlayer(props:{player:Player, onClick?}){
 
     
     var highlightcolor = 'black'
-    if(props.player.id == gamemanager.getGame().shownPlayer.id){
+    if(props.player.id == props.client.helper.getGame().shownPlayerid){
         highlightcolor = 'blue'
     }
 
