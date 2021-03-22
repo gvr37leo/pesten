@@ -29,12 +29,6 @@ var server = new Server()
 var clients = [new Client(),new Client()]
 var currentclientI = 0
 
-server.output.listen((e) => {
-    clients[0].input(e.type,e.data)
-    clients[1].input(e.type,e.data)
-    renderHTML()
-    
-})
 
 clients[0].output.listen(e => {
     server.input(e.type,e.data)
@@ -44,12 +38,22 @@ clients[1].output.listen(e => {
     server.input(e.type,e.data)
 })
 
+
 var appel = document.querySelector('#app');
 server.input('init',{})
 server.input('playerjoin',{name:'amy'})
 server.input('playerjoin',{name:'bob'})
 server.input('playerjoin',{name:'carl'})
 server.input('playerjoin',{name:'dante'})
+
+server.connect(clients[0])
+server.connect(clients[1])
+
+// server.output.listen((e) => {
+//     clients[0].input(e.type,e.data)
+//     clients[1].input(e.type,e.data)
+//     renderHTML()
+// })
 
 server.input('gamestart',{})
 

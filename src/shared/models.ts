@@ -43,6 +43,7 @@ class Entity{
     children:number[] = []
     ordercount = 0
     sortorder = 0
+    synced = false
 
     public constructor(init?:Partial<Entity>) {
         Object.assign(this, init);
@@ -118,7 +119,7 @@ function storeAdd(store:Store<Entity>){
 class Game extends Entity{
     turnindex:number = 0
     currentHouse:House
-    shownPlayerid:number
+    // shownPlayerid:number
     bullycounter = 0
 
     constructor(){
@@ -151,6 +152,6 @@ class Player extends Entity{
     }
 
     isDiscoveringHouse:boolean
-    houseOptions:House[] = []
-    discoverCb
+    discoverHouseOptions:House[] = []
+    discoverid
 }

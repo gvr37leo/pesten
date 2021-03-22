@@ -9,7 +9,7 @@ function RenderPlayer(props:{player:Player, client:Client, onClick?}){
 
     
     var highlightcolor = 'black'
-    if(props.player.id == props.client.helper.getGame().shownPlayerid){
+    if(props.player.id == props.client.shownPlayerid){
         highlightcolor = 'blue'
     }
 

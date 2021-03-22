@@ -3,6 +3,8 @@ class GameManager{
     eventQueue = new EventQueue()
     entityStore = new Store<Entity>()
     helper: Helper
+    broadcastEvent = new EventSystem<{type:string,data}>()
+    sendEvent = new EventSystem<{clientid:number,type:string,data}>()
 
     constructor(){
         
@@ -27,7 +29,10 @@ class GameManager{
         this.eventQueue.listen('playerjoin', (player) => {
             var add = storeAdd(this.entityStore)
             var playersNode = this.helper.getPlayersNode()
-            add(new Player(player), playersNode)
+            var newentity = add(new Player(player), playersNode)
+
+            //send id to client
+
             // add(new Player({name:'amy'}),playersNode)
             // add(new Player({name:'bob'}),playersNode)
             // add(new Player({name:'carl'}),playersNode)
@@ -40,7 +45,7 @@ class GameManager{
             var discardPile = this.helper.getDiscardPile()
 
             var add = storeAdd(this.entityStore)
-            game.shownPlayerid = this.helper.getCurrentPlayer().id
+            // game.shownPlayerid = this.helper.getCurrentPlayer().id
            
             
             for(var house of Object.values(houseMap)){
@@ -156,6 +161,10 @@ class GameManager{
             game.bullycounter = 0
         })
 
+        this.eventQueue.listen('turnstart',(playerid) => {
+            //emit turnstart event
+        })
+
         this.eventQueue.addRule('pass',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,() => {
             return this.helper.getGame().bullycounter == 0
         })
@@ -164,11 +173,8 @@ class GameManager{
             this.incrementTurn(1)
         })
 
-        this.eventQueue.listenDiscovery('discoverhouse',(data,cb) => {
-            var currentplayer = this.helper.getCurrentPlayer()
-            currentplayer.isDiscoveringHouse = true
-            currentplayer.houseOptions = data
-            currentplayer.discoverCb = cb
+        this.eventQueue.listenDiscovery('discoverhouse',(data,id) => {
+            //send update to client(already done in onprocess)
         })
 
         this.eventQueue.listen('gamewon',() => {
@@ -203,11 +209,17 @@ class GameManager{
     incrementTurn(count){
         var game = this.helper.getGame()
         game.turnindex = (game.turnindex + count) % this.helper.getPlayers().length
-        game.shownPlayerid = this.helper.getCurrentPlayer().id
+
+        this.eventQueue.add('turnstart',this.helper.getCurrentPlayer().id)
     }
     
     chooseHouse(player:Player,cb:(house:House) => void){
+        
+        player.isDiscoveringHouse = true
+        player.discoverHouseOptions = Object.values(houseMap)
+
         this.eventQueue.startDiscovery('discoverhouse',Object.values(houseMap),(data) => {
+            player.isDiscoveringHouse = false
             cb(data)
         })
     }

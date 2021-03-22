@@ -4,6 +4,8 @@ class Client{
     output = new EventSystem<{type,data}>()
     entityStore:Store<Entity>
     helper: Helper
+    clientid = 0
+    shownPlayerid = 0
 
 
     constructor(){
@@ -15,6 +17,7 @@ class Client{
             this.entityStore = this.deserialize(data)
             this.helper = new Helper(this.entityStore)
             this.updateHtml()
+            renderHTML()
         }
     }
 
