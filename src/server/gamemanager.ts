@@ -61,7 +61,7 @@ class GameManager{
             new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
             new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
 
-            shuffle(this.helper.getDeckCards()).forEach((card,i) => card.sortorder = i)
+            shuffle(this.helper.getDeckContainer().children)
             var shuffleddeck = this.helper.getDeckCards()
             for(var player of players){
                 shuffleddeck.splice(0,5).forEach(card => card.setParent(player))
@@ -122,7 +122,7 @@ class GameManager{
         
 
         this.eventQueue.listen('playcard',(data) => {
-            var card = data.data
+            var card = Object.assign(new Card(),data.data) 
             var game = this.helper.getGame()
             var currentplayer = this.helper.getCurrentPlayer()
             card.setParent(this.helper.getDiscardPile())
@@ -180,7 +180,7 @@ class GameManager{
 
 
 
-        this.eventQueue.addRule('acceptcards',`it's not your turn`,(data) => {
+        this.eventQueue.addRule('pass',`it's not your turn`,(data) => {
             return data.clientid == this.helper.getCurrentPlayer().clientid
         })
         this.eventQueue.addRule('pass',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,() => {

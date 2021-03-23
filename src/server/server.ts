@@ -29,6 +29,7 @@ class Server{
         client.input('idreturn',client.id)
 
         client.output.listen(e => {
+            e = JSON.parse(JSON.stringify(e))
             server.input(e.type,{clientid:client.id,data:e.data})
         })
     }

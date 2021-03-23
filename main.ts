@@ -21,7 +21,6 @@
 
 
 //todo
-//check function calls on objects received in gamemanager.eventqueue
 //start with sockets
 
 

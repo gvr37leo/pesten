@@ -41,8 +41,8 @@ class Entity{
     type:string = ''
     name:string =''
     children:number[] = []
-    ordercount = 0
-    sortorder = 0
+    // ordercount = 0
+    // sortorder = 0
     synced = false
 
     public constructor(init?:Partial<Entity>) {
@@ -58,7 +58,7 @@ class Entity{
         }
         this.children.push(child.id)
         child.parent = this.id
-        child.sortorder = this.ordercount++
+        // child.sortorder = this.ordercount++
     }
 
     setParent(parent:Entity){
@@ -89,7 +89,7 @@ class Entity{
     }
 
     _children(cb:(ent:Entity) => boolean):Entity[]{
-        return this.children.map(id => Entity.globalEntityStore.get(id)).filter(cb).sort((a,b) => a.sortorder - b.sortorder)
+        return this.children.map(id => Entity.globalEntityStore.get(id)).filter(cb)
     }
 
     allChildren(){
