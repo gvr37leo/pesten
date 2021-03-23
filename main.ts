@@ -20,6 +20,12 @@
 /// <reference path="src/server/server.ts" />
 
 
+//todo
+//remove shownplayerid and its functionality
+//check discover functionality
+//check function calls on objects received in gamemanager.eventqueue
+//start with sockets
+
 
 //updates to librarys
 //discovery in eventqueue
@@ -41,19 +47,14 @@ clients[1].output.listen(e => {
 
 var appel = document.querySelector('#app');
 server.input('init',{})
-server.input('playerjoin',{name:'amy'})
-server.input('playerjoin',{name:'bob'})
-server.input('playerjoin',{name:'carl'})
-server.input('playerjoin',{name:'dante'})
 
 server.connect(clients[0])
 server.connect(clients[1])
 
-// server.output.listen((e) => {
-//     clients[0].input(e.type,e.data)
-//     clients[1].input(e.type,e.data)
-//     renderHTML()
-// })
+server.input('playerjoin',{name:'amy',clientid:clients[0].id})
+server.input('playerjoin',{name:'bob',clientid:clients[1].id})
+// server.input('playerjoin',{name:'carl',clientid:clients[1].id})
+// server.input('playerjoin',{name:'dante',clientid:clients[1].id})
 
 server.input('gamestart',{})
 

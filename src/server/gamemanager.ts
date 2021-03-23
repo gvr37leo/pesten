@@ -19,10 +19,11 @@ class GameManager{
             Entity.globalEntityStore = this.entityStore
             var add = storeAdd(this.entityStore)
 
-            var game = add(new Game(),null)
+            var game = add(new Game(),null) as Game
             var discardPile = add(new Entity({name:'discardpile'}),game)
             var players = add(new Entity({name:'players'}),game)
             var deck = add(new Entity({name:'deck'}), game)
+            game.status = 'prestart'
 
         })
 
@@ -41,6 +42,7 @@ class GameManager{
         
         this.eventQueue.listen('gamestart',() => {
             var game = this.helper.getGame()
+            game.status = 'started'
             var deck = this.helper.getDeckContainer()
             var discardPile = this.helper.getDiscardPile()
 
@@ -70,12 +72,14 @@ class GameManager{
             this.helper.getGame().currentHouse = this.helper.getTopCardDiscardPile().house
         })
         
-        this.eventQueue.addRule('playcard','its not your turn',(card:Card) => {
-            return this.helper.getCurrentPlayer().id == card.getParent().id
-        })
+        // this.eventQueue.addRule('playcard','card is not in your hand',(data) => {
+        //     var card = data.card
+        //     return this.helper.getCurrentPlayer().id == card.getParent().id
+        // })
 
 
-        this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(card:Card) => {
+        this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(data) => {
+            var card = data.card
             if(this.helper.getGame().bullycounter > 0){
                 return card.isJoker || card.rank.name == 'two'
             }else{
@@ -83,8 +87,8 @@ class GameManager{
             }
         })
 
-        this.eventQueue.addRule('playcard','cards house or rank needs to match or the top card has to be a jack or joker',(card:Card) => {
-
+        this.eventQueue.addRule('playcard','cards house or rank needs to match or the top card has to be a jack or joker',(data) => {
+            var card = data.card
             var topcard = this.helper.getTopCardDiscardPile()
             
             if(topcard == null){
@@ -97,8 +101,8 @@ class GameManager{
             card.isJoker || topcard.isJoker 
         })
 
-        this.eventQueue.addRule('playcard','final card may not be a special card',(card:Card) => {
-
+        this.eventQueue.addRule('playcard','final card may not be a special card',(data) => {
+            var card = data.card
             var topcard = this.helper.getTopCardDiscardPile()
             if(topcard == null){
                 return true
@@ -114,7 +118,12 @@ class GameManager{
             return true
         })
 
-        this.eventQueue.listen('playcard',(card:Card) => {
+        this.eventQueue.addRule('playcard',`it's not your turn`,(data) => {
+            return data.clientid == this.helper.getCurrentPlayer().clientid
+        })
+
+        this.eventQueue.listen('playcard',(data) => {
+            var card = data.card
             var game = this.helper.getGame()
             var currentplayer = this.helper.getCurrentPlayer()
             card.setParent(this.helper.getDiscardPile())
@@ -146,6 +155,9 @@ class GameManager{
             
         })
 
+        this.eventQueue.addRule('acceptcards',`it's not your turn`,(data) => {
+            return data.clientid == this.helper.getCurrentPlayer().clientid
+        })
         this.eventQueue.listen('acceptcards',() => {
             var currentplayer = this.helper.getCurrentPlayer()
             var topcard = this.helper.getTopCardDiscardPile()
@@ -161,10 +173,17 @@ class GameManager{
             game.bullycounter = 0
         })
 
+
+
         this.eventQueue.listen('turnstart',(playerid) => {
-            //emit turnstart event
+            this.broadcastEvent.trigger({type:'turnstart',data:playerid})
         })
 
+
+
+        this.eventQueue.addRule('acceptcards',`it's not your turn`,(data) => {
+            return data.clientid == this.helper.getCurrentPlayer().clientid
+        })
         this.eventQueue.addRule('pass',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,() => {
             return this.helper.getGame().bullycounter == 0
         })
@@ -174,10 +193,12 @@ class GameManager{
         })
 
         this.eventQueue.listenDiscovery('discoverhouse',(data,id) => {
-            //send update to client(already done in onprocess)
+            data.discoverid = id
         })
 
         this.eventQueue.listen('gamewon',() => {
+            this.helper.getGame().status = 'finished'
+
             for(var player of this.helper.getPlayers()){
                 if(player._children(e => true).length == 0){
                     console.log(player.name)
@@ -218,8 +239,9 @@ class GameManager{
         player.isDiscoveringHouse = true
         player.discoverHouseOptions = Object.values(houseMap)
 
-        this.eventQueue.startDiscovery('discoverhouse',Object.values(houseMap),(data) => {
+        this.eventQueue.startDiscovery('discoverhouse',player,(data) => {
             player.isDiscoveringHouse = false
+            player.discoverHouseOptions = []
             cb(data)
         })
     }

@@ -121,6 +121,7 @@ class Game extends Entity{
     currentHouse:House
     // shownPlayerid:number
     bullycounter = 0
+    status = ''
 
     constructor(){
         super()
@@ -151,6 +152,7 @@ class Player extends Entity{
         this.type = 'player'
     }
 
+    clientid
     isDiscoveringHouse:boolean
     discoverHouseOptions:House[] = []
     discoverid

@@ -4,8 +4,7 @@ class Client{
     output = new EventSystem<{type,data}>()
     entityStore:Store<Entity>
     helper: Helper
-    clientid = 0
-    shownPlayerid = 0
+    id = null
 
 
     constructor(){
@@ -19,10 +18,11 @@ class Client{
             this.updateHtml()
             renderHTML()
         }
-    }
 
-    connect(server:Server){
-        server.onConnect(this)
+        if(type == 'idreturn'){
+            this.id = data
+        }
+       
     }
 
     updateHtml(){

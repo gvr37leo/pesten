@@ -6,7 +6,7 @@ class EventQueue{
     events:{type:string,data:any}[]
     onProcessFinished = new EventSystem<any>()
     rules:{type:string,error:string,rulecb:(data: any) => boolean}[] = []
-    discoveryidcounter: any
+    discoveryidcounter = 0
 
     constructor(){
         this.listeners = []
