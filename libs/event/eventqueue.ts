@@ -5,6 +5,7 @@ class EventQueue{
     listeners:{id:number, type: string; cb: (data: any) => void; }[]
     events:{type:string,data:any}[]
     onProcessFinished = new EventSystem<any>()
+    onRuleBroken = new EventSystem<any>()
     rules:{type:string,error:string,rulecb:(data: any) => boolean}[] = []
     discoveryidcounter = 0
 
@@ -35,9 +36,9 @@ class EventQueue{
         let createdid = this.discoveryidcounter++
         
         let listenerid = this.listen('completediscovery',(discovery:{data,id}) => {
-            if(discovery.id == createdid){
+            if(discovery.data.id == createdid){
                 this.unlisten(listenerid)
-                cb(discovery.data)
+                cb(discovery.data.data)
             }
         })
         this.addAndTrigger(type,{data,id: createdid})
@@ -72,6 +73,7 @@ class EventQueue{
     }
 
     process(){
+        
         while(this.events.length > 0){
             let currentEvent = this.events.shift()
             let listeners = this.listeners.filter(l => l.type == currentEvent.type)
@@ -83,8 +85,10 @@ class EventQueue{
                     listener.cb(currentEvent.data)
                 }
             }else{
-                toastr.error(first(brokenrules).error)
+                //todo
+                // toastr.error(first(brokenrules).error)
                 console.log(first(brokenrules).error)
+                this.onRuleBroken.trigger({event:currentEvent,error:first(brokenrules).error})
             }
         }
         this.onProcessFinished.trigger(0)

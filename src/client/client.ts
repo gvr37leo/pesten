@@ -22,6 +22,10 @@ class Client{
         if(type == 'idreturn'){
             this.id = data
         }
+
+        if(type == 'error'){
+            toastr.error(data)
+        }
        
     }
 

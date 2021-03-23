@@ -21,13 +21,16 @@ class Server{
 
         this.gamemanager.sendEvent.listen((event) => {
             this.clients.get(event.clientid).input(event.type,event.data)
-            
         })
     }
 
     connect(client:Client){
         this.clients.add(client)
         client.input('idreturn',client.id)
+
+        client.output.listen(e => {
+            server.input(e.type,{clientid:client.id,data:e.data})
+        })
     }
 
     input(type,data){

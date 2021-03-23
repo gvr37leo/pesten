@@ -25,7 +25,7 @@ function renderHomepage(client:Client){
                         {(() => {
                             if(game.bullycounter > 0){
                                 return <div style={{cursor:'pointer', border:'1px solid white', margin:'40px', padding:'10px'}} onClick={() => {
-                                    client.output.trigger({type:'acceptcards',data:{clientid:client.id}})
+                                    client.output.trigger({type:'acceptcards',data:null})
                                 }}>accept cards {game.bullycounter}</div>
                             }else{
                                 return null
@@ -33,7 +33,7 @@ function renderHomepage(client:Client){
                         })()}
 
                         <div style={{cursor:'pointer', border:'1px solid white', margin:'40px', padding:'10px'}} onClick={() => {
-                            client.output.trigger({type:'pass',data:{clientid:client.id}})
+                            client.output.trigger({type:'pass',data:null})
                         }}>
                             <div>draw a card and pass</div>
                             <div>{client.helper.getDeckCards().length} remaining</div>
@@ -43,7 +43,7 @@ function renderHomepage(client:Client){
                 </div>
                 <div style={{display:"flex", justifyContent:"start", overflow:"auto", margin:"20px", border:"1px solid white"}}>
                     {currentplayercards.map((c:Card) => <CardComp onClick={() => {
-                        client.output.trigger({type:'playcard',data:{card:c,clientid:client.id}})
+                        client.output.trigger({type:'playcard',data:c})
                     }} key={c.id} card={c} />)}
                 </div>
             </div>

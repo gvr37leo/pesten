@@ -36,8 +36,8 @@ var houseMap = {
 class Entity{
     static globalEntityStore:Store<Entity>
 
-    id:number = -1
-    parent:number = -1
+    id:number = null
+    parent:number = null
     type:string = ''
     name:string =''
     children:number[] = []
@@ -92,6 +92,27 @@ class Entity{
         return this.children.map(id => Entity.globalEntityStore.get(id)).filter(cb).sort((a,b) => a.sortorder - b.sortorder)
     }
 
+    allChildren(){
+        return this._children(() => true)
+    }
+
+    remove(){
+        remove(this.getParent().children,this.id)
+        Entity.globalEntityStore.remove(this.id)
+        this.removeChildren()
+        return this
+    }
+
+    inject(parent){
+        Entity.globalEntityStore.add(this)
+        this.setParent(parent)
+        return this
+    }
+
+    removeChildren(){
+        this.children = []
+        this.descendants(() => true).forEach(e => Entity.globalEntityStore.remove(e.id))
+    }
 
     ancestor(cb:(ent:Entity) => boolean):Entity{
         var current:Entity = this
@@ -101,20 +122,6 @@ class Entity{
         return current
     }
 }
-
-
-
-
-function storeAdd(store:Store<Entity>){
-    return function(entity:Entity,parent:Entity){
-        store.add(entity)
-        entity.setParent(parent)
-        return entity
-    }
-}
-
-
-
 
 class Game extends Entity{
     turnindex:number = 0

@@ -12,32 +12,27 @@ class GameManager{
 
     setupListeners(){
 
+        this.eventQueue.onRuleBroken.listen(e => {
+            this.sendEvent.trigger({type:'error',clientid:e.event.data.clientid,data:e.error})
+        })
 
         this.eventQueue.listen('init',() => {
             this.entityStore = new Store<Entity>()
             this.helper = new Helper(this.entityStore)
             Entity.globalEntityStore = this.entityStore
-            var add = storeAdd(this.entityStore)
+            
 
-            var game = add(new Game(),null) as Game
-            var discardPile = add(new Entity({name:'discardpile'}),game)
-            var players = add(new Entity({name:'players'}),game)
-            var deck = add(new Entity({name:'deck'}), game)
+            var game = this.entityStore.add(new Game()) as Game
+            var discardPile = new Entity({name:'discardpile'}).inject(game)
+            var players = new Entity({name:'players'}).inject(game)
+            var deck = new Entity({name:'deck'}).inject(game)
             game.status = 'prestart'
 
         })
 
-        this.eventQueue.listen('playerjoin', (player) => {
-            var add = storeAdd(this.entityStore)
+        this.eventQueue.listen('playerjoin', (e) => {
             var playersNode = this.helper.getPlayersNode()
-            var newentity = add(new Player(player), playersNode)
-
-            //send id to client
-
-            // add(new Player({name:'amy'}),playersNode)
-            // add(new Player({name:'bob'}),playersNode)
-            // add(new Player({name:'carl'}),playersNode)
-            // add(new Player({name:'dante'}),playersNode)
+            var newentity = new Player(e).inject(playersNode)
         })
         
         this.eventQueue.listen('gamestart',() => {
@@ -45,27 +40,30 @@ class GameManager{
             game.status = 'started'
             var deck = this.helper.getDeckContainer()
             var discardPile = this.helper.getDiscardPile()
+            var players = this.helper.getPlayers()
 
-            var add = storeAdd(this.entityStore)
-            // game.shownPlayerid = this.helper.getCurrentPlayer().id
-           
+            deck.removeChildren()
+            discardPile.removeChildren()
+            players.forEach(p => p.removeChildren())
+
+            
             
             for(var house of Object.values(houseMap)){
                 for(var rank of Object.values(rankMap)){
-                    add(new Card({
+                    new Card({
                         rank:rank,
                         house:house,
                         url:`./resources/${rank.abbr+house.abbr}.jpg`
-                    }), deck)
+                    }).inject(deck)
                 }   
             }
 
-            add(new Card({isJoker:true,url:`./resources/joker.jpg`}), deck)
-            add(new Card({isJoker:true,url:`./resources/joker.jpg`}), deck)
+            new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
+            new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
 
             shuffle(this.helper.getDeckCards()).forEach((card,i) => card.sortorder = i)
             var shuffleddeck = this.helper.getDeckCards()
-            for(var player of this.helper.getPlayers()){
+            for(var player of players){
                 shuffleddeck.splice(0,5).forEach(card => card.setParent(player))
             }
             shuffleddeck.splice(0,1)[0].setParent(discardPile)
@@ -77,9 +75,12 @@ class GameManager{
         //     return this.helper.getCurrentPlayer().id == card.getParent().id
         // })
 
+        this.eventQueue.addRule('playcard',`it's not your turn`,(data) => {
+            return data.clientid == this.helper.getCurrentPlayer().clientid
+        })
 
         this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(data) => {
-            var card = data.card
+            var card = data.data
             if(this.helper.getGame().bullycounter > 0){
                 return card.isJoker || card.rank.name == 'two'
             }else{
@@ -88,7 +89,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('playcard','cards house or rank needs to match or the top card has to be a jack or joker',(data) => {
-            var card = data.card
+            var card = data.data
             var topcard = this.helper.getTopCardDiscardPile()
             
             if(topcard == null){
@@ -102,7 +103,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('playcard','final card may not be a special card',(data) => {
-            var card = data.card
+            var card = data.data
             var topcard = this.helper.getTopCardDiscardPile()
             if(topcard == null){
                 return true
@@ -118,12 +119,10 @@ class GameManager{
             return true
         })
 
-        this.eventQueue.addRule('playcard',`it's not your turn`,(data) => {
-            return data.clientid == this.helper.getCurrentPlayer().clientid
-        })
+        
 
         this.eventQueue.listen('playcard',(data) => {
-            var card = data.card
+            var card = data.data
             var game = this.helper.getGame()
             var currentplayer = this.helper.getCurrentPlayer()
             card.setParent(this.helper.getDiscardPile())
@@ -202,6 +201,7 @@ class GameManager{
             for(var player of this.helper.getPlayers()){
                 if(player._children(e => true).length == 0){
                     console.log(player.name)
+                    //todo
                     toastr.success(`${player.name} won the game`)
                 }
             }

@@ -21,8 +21,6 @@
 
 
 //todo
-//remove shownplayerid and its functionality
-//check discover functionality
 //check function calls on objects received in gamemanager.eventqueue
 //start with sockets
 
@@ -34,15 +32,6 @@ var server = new Server()
 
 var clients = [new Client(),new Client()]
 var currentclientI = 0
-
-
-clients[0].output.listen(e => {
-    server.input(e.type,e.data)
-})
-
-clients[1].output.listen(e => {
-    server.input(e.type,e.data)
-})
 
 
 var appel = document.querySelector('#app');
