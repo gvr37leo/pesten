@@ -1,5 +1,5 @@
 start tsc
-start index.html
+@REM start index.html
 
 @REM start tsc
 @REM start node .\server.js
