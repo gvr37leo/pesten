@@ -48,8 +48,10 @@ class Server{
     connect(client:ServerClient){
         this.clients.add(client)
         client.input('idreturn',client.id)
+        //maybe add player aswell
 
         client.socket.on('disconnect',() => {
+            //if so delete it here
             this.clients.remove(client.id)
         })
 
