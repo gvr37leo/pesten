@@ -32,7 +32,7 @@ class GameManager{
 
         this.eventQueue.listen('playerjoin', (e) => {
             var playersNode = this.helper.getPlayersNode()
-            var newentity = new Player(e).inject(playersNode)
+            var newentity = new Player({clientid:e.clientid,name:e.data.name}).inject(playersNode)
         })
         
         this.eventQueue.listen('gamestart',() => {
@@ -251,51 +251,7 @@ class GameManager{
 
 }
 
-class Helper{
-    
 
-    constructor(public store:Store<Entity>){
-        this.store = store
-    }
-
-    getGame(){
-        return this.store.list().find(e => e.parent == null) as Game
-    }
-
-    getTopCardDeck():Card{
-        return last(this.getDeckCards()) as Card
-    }
-
-    getTopCardDiscardPile():Card{
-        return last(this.getDiscardPile()._children(e => true)) as Card
-    }
-
-    getDeckContainer(){
-        return this.getGame().child(e => e.name == 'deck')
-    }
-
-    getDeckCards(){
-        return this.getDeckContainer()._children(e => true) as Card[]
-    }
-
-    getDiscardPile(){
-        return this.getGame().child(e => e.name == 'discardpile')
-    }
-
-    getPlayersNode():Entity{
-        return this.getGame().child(e => e.name == 'players')
-    }
-
-    getPlayers(){
-        return this.getPlayersNode()._children(e => true) as Player[]
-    }
-
-    getCurrentPlayer():Player{
-        var game = this.getGame()
-        var players = this.getPlayers()
-        return players[game.turnindex % players.length]
-    }
-}
 
 function Enum2Array(en:any){
     return Object.values(en).filter(val => typeof val  == "number")

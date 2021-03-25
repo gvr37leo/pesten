@@ -14,6 +14,7 @@ class Client{
     input(type,data){
         if(type == 'update'){
             this.entityStore = this.deserialize(data)
+            Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
             this.updateHtml()
             renderHTML()
@@ -33,8 +34,8 @@ class Client{
         this.root = renderHomepage(this)
     }
 
-    deserialize(data:string){
-        var entities = JSON.parse(data)
+    deserialize(data:any[]){
+        var entities = data
         var store = new Store<Entity>()
         
         for(var entity of entities){

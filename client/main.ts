@@ -15,8 +15,8 @@
 /// <reference path="tsx/homepage.tsx" />
 /// <reference path="tsx/modal.tsx" />
 /// <reference path="tsx/player.tsx" />
-/// <reference path="../shared/models.ts" />
-
+/// <reference path="shared/models.ts" />
+/// <reference path="shared/helper.ts" />
 
 
 
@@ -24,10 +24,37 @@
 
 
 const socket = io();
-socket.emit('hello',{data:'test'})
-socket.on('message',(data) => {
-    console.log(data)
+var userID = null
+
+
+document.querySelector('#playerjoin').addEventListener('click',e => {
+    var name = (document.querySelector('#name') as HTMLInputElement).value
+    socket.emit('message',{type:'playerjoin',data:{name:name}})
 })
+
+document.querySelector('#gamestart').addEventListener('click',e => {
+    socket.emit('message',{type:'gamestart',data:{}})
+})
+
+var client = new Client()
+client.output.listen((val) => {
+    socket.emit('message',val)
+})
+socket.on('message',(message) => {
+    client.input(message.type,message.data)
+})
+
+
+socket.on('sessionID',({ sessionID, userID }) => {
+    console.log(`sessionID:${sessionID}`)
+    userID = userID
+    localStorage.setItem('sessionID',sessionID)
+})
+
+var appel = document.querySelector('#app');
+function renderHTML(){
+    ReactDOM.render(client.root, appel)
+}
 
 
 //updates to librarys
@@ -39,7 +66,7 @@ socket.on('message',(data) => {
 // var currentclientI = 0
 
 
-// var appel = document.querySelector('#app');
+
 // server.input('init',{})
 
 // server.connect(clients[0])
@@ -55,9 +82,7 @@ socket.on('message',(data) => {
 
 
 
-// function renderHTML(){
-//     ReactDOM.render(clients[currentclientI].root, appel)
-// }
+
 
 // document.addEventListener('keydown',e => {
 //     if(e.key =='q'){

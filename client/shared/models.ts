@@ -110,8 +110,8 @@ class Entity{
     }
 
     removeChildren(){
-        this.children = []
         this.descendants(() => true).forEach(e => Entity.globalEntityStore.remove(e.id))
+        this.children = []
     }
 
     ancestor(cb:(ent:Entity) => boolean):Entity{

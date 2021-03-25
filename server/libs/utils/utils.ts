@@ -76,30 +76,6 @@ function mod(number: number, modulus: number){
     return ((number%modulus)+modulus)%modulus;
 }
 
-var keys = {}
-
-document.addEventListener('keydown', (e) => {
-    keys[e.key] = true
-})
-
-document.addEventListener('keyup', (e) => {
-    keys[e.key] = false
-})
-
-function getMoveInput():Vector{
-    var dir = new Vector(0,0)
-    if(keys['a'])dir.x--//left
-    if(keys['w'])dir.y++//up
-    if(keys['d'])dir.x++//right
-    if(keys['s'])dir.y--//down
-    return dir;
-}
-
-function getMoveInputYFlipped():Vector{
-    var input = getMoveInput()
-    input.y *= -1
-    return input
-}
 
 function loadTextFiles(strings:string[]){
     var promises = []

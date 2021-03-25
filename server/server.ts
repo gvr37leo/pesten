@@ -1,15 +1,36 @@
+class ServerClient{
+    
+    output = new EventSystem<any>()
+
+    constructor(public socket, public id){
+
+
+        this.socket.on('message',(data) => {
+            this.output.trigger(data)
+        })
+    }
+
+    input(type,data){
+        this.socket.emit('message',{type,data})
+    }
+}
+
 class Server{
     gamemanager: GameManager;
-    // output = new EventSystem<{type:string,data:any}>()
-    clients = new Store<Client>()
+    output = new EventSystem<{type:string,data:any}>()
+    clients = new Store<ServerClient>()
+
+    onBroadcast = new EventSystem<{type:string,data:any}>()
 
     constructor(){
         this.gamemanager = new GameManager()
         Entity.globalEntityStore = this.gamemanager.entityStore;
 
         this.gamemanager.setupListeners()
+        this.gamemanager.eventQueue.addAndTrigger('init',null)
+
         this.gamemanager.eventQueue.onProcessFinished.listen(() => {
-            this.gamemanager.broadcastEvent.trigger({type:'update',data:this.serialize()})
+            this.gamemanager.broadcastEvent.trigger({type:'update',data:this.gamemanager.entityStore.list()})
             //set synced status of updated entities to true
         })
 
@@ -24,12 +45,15 @@ class Server{
         })
     }
 
-    connect(client:Client){
+    connect(client:ServerClient){
         this.clients.add(client)
         client.input('idreturn',client.id)
 
+        client.socket.on('disconnect',() => {
+            this.clients.remove(client.id)
+        })
+
         client.output.listen(e => {
-            e = JSON.parse(JSON.stringify(e))
             server.input(e.type,{clientid:client.id,data:e.data})
         })
     }
