@@ -16,29 +16,27 @@
 /// <reference path="tsx/player.tsx" />
 /// <reference path="shared/models.ts" />
 /// <reference path="shared/helper.ts" />
+/// <reference path="tsx/startscreen.tsx" />
+/// <reference path="tsx/mainapp.tsx" />
+/// <reference path="tsx/gamewonscreen.tsx" />
+
+
 
 
 
 //todo
-//welcome/login screen
+
 //center name input
-//reset/start/start new game button(only show when clientplayer has empty name)
-//shown on login/game and end screen
+//show hide debug menu
+// AD.jpg
+// heroku
+//add gamewon to debug menu
 
 
 
 const socket = io();
 var userID = null
 
-
-document.querySelector('#playerjoin').addEventListener('click',e => {
-    var name = (document.querySelector('#name') as HTMLInputElement).value
-    socket.emit('message',{type:'playerjoin',data:{name:name}})
-})
-
-document.querySelector('#gamestart').addEventListener('click',e => {
-    socket.emit('message',{type:'gamestart',data:{}})
-})
 
 var client = new Client()
 client.output.listen((val) => {

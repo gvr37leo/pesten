@@ -1,4 +1,7 @@
 cd server
-start.bat
+start tsc.cmd
+start node --inspect .\mainserver.js
+
 cd ../client
-start.bat
+start tsc.cmd
+start http://localhost:8000/

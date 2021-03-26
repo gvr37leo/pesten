@@ -61,6 +61,7 @@ class Server{
             player.remove()
             //maybe not remove but set as dced and allow people to return via sessionid
             this.clients.remove(client.id)
+            this.updateClients()
         })
 
         client.output.listen(e => {

@@ -31,7 +31,7 @@ class Client{
     }
 
     updateHtml(){
-        this.root = renderHomepage(this)
+        this.root = MainApp({client:this})
     }
 
     deserialize(data:any[]){

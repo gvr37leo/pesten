@@ -16,7 +16,7 @@ function RenderPlayer(props:{player:Player, client:Client, onClick?}){
     var cardchildren = props.player._children(e => true)
     return (<div onClick={props.onClick} className="player" style={{margin:'10px', cursor:'pointer', border:`3px solid ${highlightcolor}`}}>
         <div style={{padding:'10px', border:`1px solid ${bordercolor}`}}>
-            <div>{props.player.name} {clientplayer.id == client.id ? "(yourself)" : ""}</div>
+            <div>{props.player.name} {clientplayer.id == props.client.id ? "(yourself)" : ""}</div>
             <div>{cardchildren.length}</div>
         </div>
     </div>)
