@@ -26,11 +26,10 @@
 
 //todo
 
-//center name input
+//do something about init state
 //show hide debug menu
 // AD.jpg
 // heroku
-//add gamewon to debug menu
 
 
 

@@ -25,9 +25,18 @@ function MainApp(props:{client:Client}){
                     <button>hide</button>
                     <button>show</button>
                 </div>
-                <button onClick={() => {
-                    props.client.output.trigger({type:'gamestart',data:{}})
-                }}>start new game</button>
+                <div>
+                    <button onClick={() => {
+                        props.client.output.trigger({type:'gamestart',data:{}})
+                    }}>start new game</button>
+                </div>
+                <div>
+                    <button onClick={() => {
+                        props.client.output.trigger({type:'debugfinishgame',data:{}})
+                    }}>debug end game</button>
+                </div>
+
+
             </div>
         </React.Fragment>
         

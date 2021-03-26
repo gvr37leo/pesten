@@ -207,6 +207,13 @@ class GameManager{
                 }
             }
         })
+
+        this.eventQueue.listen('debugfinishgame',() => {
+            var game = this.helper.getGame()
+            game.status = 'finished'
+            var firstplayer = this.helper.getPlayers()[0]
+            game.winnerplayerid = firstplayer.id
+        })
     }
 
     drawCards(player:Player,count:number){
