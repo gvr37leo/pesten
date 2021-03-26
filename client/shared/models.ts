@@ -129,6 +129,8 @@ class Game extends Entity{
     // shownPlayerid:number
     bullycounter = 0
     status = ''
+    winnerplayerid: number
+    
 
     constructor(){
         super()

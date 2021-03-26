@@ -31,8 +31,8 @@ class GameManager{
         })
 
         this.eventQueue.listen('playerjoin', (e) => {
-            var playersNode = this.helper.getPlayersNode()
-            var newentity = new Player({clientid:e.clientid,name:e.data.name}).inject(playersNode)
+            var player = this.helper.getPlayers().find(p => p.clientid == e.clientid)
+            player.name = e.data.name
         })
         
         this.eventQueue.listen('gamestart',() => {
@@ -196,13 +196,14 @@ class GameManager{
         })
 
         this.eventQueue.listen('gamewon',() => {
-            this.helper.getGame().status = 'finished'
+            var game = this.helper.getGame()
+            game.status = 'finished'
 
             for(var player of this.helper.getPlayers()){
                 if(player._children(e => true).length == 0){
-                    console.log(player.name)
-                    //todo
-                    toastr.success(`${player.name} won the game`)
+
+                    console.log(`${player.name} won the game`)
+                    game.winnerplayerid = player.id
                 }
             }
         })

@@ -30,7 +30,7 @@ class Server{
         this.gamemanager.eventQueue.addAndTrigger('init',null)
 
         this.gamemanager.eventQueue.onProcessFinished.listen(() => {
-            this.gamemanager.broadcastEvent.trigger({type:'update',data:this.gamemanager.entityStore.list()})
+            this.updateClients()
             //set synced status of updated entities to true
         })
 
@@ -45,13 +45,21 @@ class Server{
         })
     }
 
+    updateClients(){
+        this.gamemanager.broadcastEvent.trigger({type:'update',data:this.gamemanager.entityStore.list()})
+    }
+
     connect(client:ServerClient){
         this.clients.add(client)
         client.input('idreturn',client.id)
-        //maybe add player aswell
+        var player = new Player({clientid:client.id})
+        player.inject(this.gamemanager.helper.getPlayersNode())
+        this.updateClients()
+        
 
         client.socket.on('disconnect',() => {
-            //if so delete it here
+            player.remove()
+            //maybe not remove but set as dced and allow people to return via sessionid
             this.clients.remove(client.id)
         })
 

@@ -9,7 +9,6 @@
 /// <reference path="libs/rect/rect.ts" />
 /// <reference path="libs/event/eventqueue.ts" />
 /// <reference path="libs/event/eventsystem.ts" />
-/// <reference path="libs/utils/camera.ts" />
 /// <reference path="client.ts" />
 /// <reference path="tsx/card.tsx" />
 /// <reference path="tsx/homepage.tsx" />
@@ -20,6 +19,11 @@
 
 
 
+//todo
+//welcome/login screen
+//center name input
+//reset/start/start new game button(only show when clientplayer has empty name)
+//shown on login/game and end screen
 
 
 

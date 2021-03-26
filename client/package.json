@@ -4,7 +4,6 @@
   "description": "",
   "main": "package.js",
   "dependencies": {
-    "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
     "@types/socket.io-client": "^1.4.36",
     "express": "*"

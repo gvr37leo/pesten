@@ -4,7 +4,13 @@ function renderHomepage(client:Client){
     if(game.status == 'prestart'){
         return <div>game hasnt started yet</div>
     }
+
     var players = client.helper.getPlayers()
+    if(game.status == 'finished'){
+        var winningplayer = players.find(p => p.id == game.winnerplayerid)
+        return <div>{winningplayer.name} has won the game</div>
+    }
+    
     var currentplayer = client.helper.getCurrentPlayer()
     var topcard = client.helper.getTopCardDiscardPile()
     var clientplayer = players.find(p => p.clientid == client.id)
