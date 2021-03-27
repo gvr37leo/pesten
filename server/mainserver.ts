@@ -32,7 +32,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 var port = 8000
 
-app.use(express.static('C:/projects/pesten/client'))
+app.use(express.static(__dirname + '/../client'))
 
 var sessionStore = new Map<number,any>()
 var idcounter = 0

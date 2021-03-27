@@ -1,0 +1,14 @@
+{
+  "name": "pesten",
+  "version": "1.0.0",
+  "description": "pesten",
+  "main": "package.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "start":"node ./server/mainserver.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
