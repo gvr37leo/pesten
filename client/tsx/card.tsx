@@ -10,7 +10,7 @@ class CardComp extends React.Component{
     render(){
         var card = this.props.card
         return (
-            <div className="card" style={{borderRadius:"3px", border:"1px solid white", padding:"10px", margin:"10px", cursor:this.props.onClick != null ? 'pointer' : 'default'}} onClick={this.props.onClick}>
+            <div className="card" style={{borderRadius:"3px",background:"black", border:"1px solid white", padding:"10px", margin:"10px", cursor:this.props.onClick != null ? 'pointer' : 'default'}} onClick={this.props.onClick}>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
                     <div style={{display:"flex", justifyContent:"center", margin:"10px"}}>
                         {(() => {

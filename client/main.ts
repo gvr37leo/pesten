@@ -26,9 +26,9 @@
 
 //todo
 
+//heroku
 //sessions
-//make it so you can see more cards in hand
-// heroku
+//bug with hanging cards in discardpile
 
 
 

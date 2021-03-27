@@ -36,7 +36,7 @@ function RenderHomepage(props:{client:Client}){
                         <CardComp card={topcard} />
                     </div>
                 </div>
-                <div style={{display:"flex", justifyContent:"center", overflow:"auto", margin:"20px", border:"1px solid white"}}>
+                <div style={{display:"flex", justifyContent:"center", flexWrap:"wrap", overflow:"auto", margin:"20px", border:"1px solid white"}}>
                     {currentplayercards.map((c:Card) => <CardComp onClick={() => {
                         props.client.output.trigger({type:'playcard',data:c})
                     }} key={c.id} card={c} />)}
