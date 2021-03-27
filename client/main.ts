@@ -26,9 +26,8 @@
 
 //todo
 
-//do something about init state
-//show hide debug menu
-// AD.jpg
+//sessions
+//make it so you can see more cards in hand
 // heroku
 
 

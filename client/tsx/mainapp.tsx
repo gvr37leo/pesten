@@ -1,3 +1,5 @@
+var shown = true
+
 function MainApp(props:{client:Client}){
     var game = client.helper.getGame()
     var players = props.client.helper.getPlayers()
@@ -21,20 +23,30 @@ function MainApp(props:{client:Client}){
             })()}
             <div style={{position:"absolute",color:"black", top:"10px", right:"10px", padding:"20px", background:"white", borderRadius:"3px"}}>
                 <div>clientid:{props.client.id}</div>
-                <div>
-                    <button>hide</button>
-                    <button>show</button>
-                </div>
-                <div>
+                <div style={{marginBottom:"10px"}}>
                     <button onClick={() => {
-                        props.client.output.trigger({type:'gamestart',data:{}})
-                    }}>start new game</button>
+                        shown = !shown
+                        client.updateHtml()
+                    }}>{shown ? "hide" : "show"}</button>
                 </div>
-                <div>
-                    <button onClick={() => {
-                        props.client.output.trigger({type:'debugfinishgame',data:{}})
-                    }}>debug end game</button>
-                </div>
+
+                {(() => {
+                    if(shown){
+                        return <React.Fragment>
+                            <div style={{marginBottom:"10px"}}>
+                                <button onClick={() => {
+                                    props.client.output.trigger({type:'gamestart',data:{}})
+                                }}>start new game</button>
+                            </div>
+                            <div style={{marginBottom:"10px"}}>
+                                <button onClick={() => {
+                                    props.client.output.trigger({type:'debugfinishgame',data:{}})
+                                }}>debug end game</button>
+                            </div>
+                        </React.Fragment>
+                    }
+                })()}
+                
 
 
             </div>

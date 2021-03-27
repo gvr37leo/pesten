@@ -26,7 +26,7 @@ class GameManager{
             var discardPile = new Entity({name:'discardpile'}).inject(game)
             var players = new Entity({name:'players'}).inject(game)
             var deck = new Entity({name:'deck'}).inject(game)
-            game.status = 'prestart'
+            game.status = 'started'
 
         })
 

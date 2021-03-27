@@ -17,7 +17,6 @@ class Client{
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
             this.updateHtml()
-            renderHTML()
         }
 
         if(type == 'idreturn'){
@@ -32,6 +31,7 @@ class Client{
 
     updateHtml(){
         this.root = MainApp({client:this})
+        renderHTML()
     }
 
     deserialize(data:any[]){
