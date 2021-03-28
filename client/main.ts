@@ -32,23 +32,14 @@
 
 
 const socket = io();
-var userID = null
 
 
 var client = new Client()
-client.output.listen((val) => {
-    socket.emit('message',val)
-})
-socket.on('message',(message) => {
-    client.input(message.type,message.data)
-})
+
+client.connectSocket(socket)
 
 
-socket.on('sessionID',({ sessionID, userID }) => {
-    console.log(`sessionID:${sessionID}`)
-    userID = userID
-    localStorage.setItem('sessionID',sessionID)
-})
+
 
 var appel = document.querySelector('#app');
 function renderHTML(){
@@ -66,17 +57,7 @@ function renderHTML(){
 
 
 
-// server.input('init',{})
 
-// server.connect(clients[0])
-// server.connect(clients[1])
-
-// server.input('playerjoin',{name:'amy',clientid:clients[0].id})
-// server.input('playerjoin',{name:'bob',clientid:clients[1].id})
-// server.input('playerjoin',{name:'carl',clientid:clients[1].id})
-// server.input('playerjoin',{name:'dante',clientid:clients[1].id})
-
-// server.input('gamestart',{})
 
 
 

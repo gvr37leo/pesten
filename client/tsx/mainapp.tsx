@@ -23,6 +23,7 @@ function MainApp(props:{client:Client}){
             })()}
             <div style={{position:"absolute",color:"black", top:"10px", right:"10px", padding:"20px", background:"white", borderRadius:"3px"}}>
                 <div>clientid:{props.client.id}</div>
+                <div>sessionid:{props.client.sessionid}</div>
                 <div style={{marginBottom:"10px"}}>
                     <button onClick={() => {
                         shown = !shown

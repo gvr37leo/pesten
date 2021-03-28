@@ -19,6 +19,7 @@ class Server{
     gamemanager: GameManager;
     output = new EventSystem<{type:string,data:any}>()
     clients = new Store<ServerClient>()
+    sessionidcounter = 0
 
     onBroadcast = new EventSystem<{type:string,data:any}>()
 
@@ -51,7 +52,7 @@ class Server{
 
     connect(client:ServerClient){
         this.clients.add(client)
-        
+        var players = this.gamemanager.helper.getPlayers()
 
         //client does a handshake
         //if client sends sessionID look for a player with that sessionid
@@ -62,15 +63,32 @@ class Server{
         //client should connect, check for sessionid in localstore/sessionstorage
         //then initiate handshake send found sessionid
         //save session and client id on client and look in database for player with sessionid = client.sessionid
+        client.socket.on('handshake',(data,fn) => {
+            
+            var sessionid = data.sessionid
+            if(sessionid == null){
+               sessionid = this.sessionidcounter++
+            }
 
+            var foundplayer = players.find(p => p.sessionid == sessionid)
+            if(foundplayer == null){
+                //create new player
+            }
 
-        client.input('idreturn',client.id)
+            fn({
+                clientid:client.id,
+                sessionid:sessionid,
+            })
+        })
+
         var player = new Player({clientid:client.id})
         player.inject(this.gamemanager.helper.getPlayersNode())
         this.updateClients()
         
 
         client.socket.on('disconnect',() => {
+            player.disconnected = true
+            player.dctimestamp = Date.now()
             player.remove()
             //maybe not remove but set as dced and allow people to return via sessionid
             this.clients.remove(client.id)

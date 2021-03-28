@@ -5,9 +5,35 @@ class Client{
     entityStore:Store<Entity>
     helper: Helper
     id = null
+    sessionid = null
+
+    // <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+    socket: any//socket.io socket
 
 
     constructor(){
+
+    }
+
+    connectSocket(socket){
+        this.socket = socket
+
+        client.output.listen((val) => {
+            socket.emit('message',val)
+        })
+        socket.on('message',(message) => {
+            client.input(message.type,message.data)
+        })
+
+        socket.on('connect',() => {
+            
+            socket.emit('handshake',{sessionid:sessionStorage.getItem('sessionid')},({ sessionid, clientid }) => {
+                localStorage.setItem('sessionid',sessionid)
+                this.sessionid = this.sessionid
+                this.id = clientid
+            })
+        })
+
 
     }
 
@@ -17,10 +43,6 @@ class Client{
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
             this.updateHtml()
-        }
-
-        if(type == 'idreturn'){
-            this.id = data
         }
 
         if(type == 'error'){

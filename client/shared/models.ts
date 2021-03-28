@@ -162,7 +162,10 @@ class Player extends Entity{
     }
 
     clientid
+    sessionid
     isDiscoveringHouse:boolean
     discoverHouseOptions:House[] = []
     discoverid
+    disconnected = false
+    dctimestamp = 0
 }
