@@ -31,7 +31,10 @@
 //bug with hanging cards in discardpile
 
 
-const socket = io();
+const socket = io({
+    reconnection:false,
+    autoConnect: false,
+});
 
 
 var client = new Client()

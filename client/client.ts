@@ -34,6 +34,7 @@ class Client{
             })
         })
 
+        socket.open()
 
     }
 
