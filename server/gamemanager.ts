@@ -38,6 +38,7 @@ class GameManager{
         this.eventQueue.listen('gamestart',() => {
             var game = this.helper.getGame()
             game.status = 'started'
+            game.bullycounter = 0
             var deck = this.helper.getDeckContainer()
             var discardPile = this.helper.getDiscardPile()
             var players = this.helper.getPlayers()

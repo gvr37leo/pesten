@@ -51,6 +51,19 @@ class Server{
 
     connect(client:ServerClient){
         this.clients.add(client)
+        
+
+        //client does a handshake
+        //if client sends sessionID look for a player with that sessionid
+        //if not found or client sends no sessionid create a new player with a new sessionid
+        //finish handshake by sending client and sessionid
+        //when a client disconnects flag player as dc'ed and set dc timestamp after 2 min delete dc'ed players
+
+        //client should connect, check for sessionid in localstore/sessionstorage
+        //then initiate handshake send found sessionid
+        //save session and client id on client and look in database for player with sessionid = client.sessionid
+
+
         client.input('idreturn',client.id)
         var player = new Player({clientid:client.id})
         player.inject(this.gamemanager.helper.getPlayersNode())

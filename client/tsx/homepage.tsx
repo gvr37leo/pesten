@@ -4,7 +4,8 @@ function RenderHomepage(props:{client:Client}){
     var players = props.client.helper.getPlayers()
     var topcard = props.client.helper.getTopCardDiscardPile()
     var clientplayer = players.find(p => p.clientid == props.client.id)
-    var currentplayercards = clientplayer._children(() => true)
+    var clientplayercards = clientplayer._children(() => true)
+    var currentplayer = props.client.helper.getCurrentPlayer()
     
     return (
         <React.Fragment>
@@ -18,7 +19,7 @@ function RenderHomepage(props:{client:Client}){
                     <div style={{flexGrow:'1',display:'flex',justifyContent:'center', alignItems:"center"}}>
 
                         {(() => {
-                            if(game.bullycounter > 0){
+                            if(game.bullycounter > 0 && clientplayer.id == currentplayer.id){
                                 return <div style={{cursor:'pointer', border:'1px solid white', margin:'40px', padding:'10px'}} onClick={() => {
                                     props.client.output.trigger({type:'acceptcards',data:null})
                                 }}>accept cards {game.bullycounter}</div>
@@ -37,7 +38,7 @@ function RenderHomepage(props:{client:Client}){
                     </div>
                 </div>
                 <div style={{display:"flex", justifyContent:"center", flexWrap:"wrap", overflow:"auto", margin:"20px", border:"1px solid white"}}>
-                    {currentplayercards.map((c:Card) => <CardComp onClick={() => {
+                    {clientplayercards.map((c:Card) => <CardComp onClick={() => {
                         props.client.output.trigger({type:'playcard',data:c})
                     }} key={c.id} card={c} />)}
                 </div>
