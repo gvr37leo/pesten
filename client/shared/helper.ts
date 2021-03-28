@@ -42,4 +42,8 @@ class Helper{
         var players = this.getPlayers()
         return players[game.turnindex % players.length]
     }
+
+    getClientPlayer(clientid):Player{
+        return this.getPlayers().find(p => p.clientid == clientid)
+    }
 }

@@ -44,6 +44,11 @@ class Server{
         this.gamemanager.sendEvent.listen((event) => {
             this.clients.get(event.clientid).input(event.type,event.data)
         })
+
+        setInterval(() => {
+            var longdcedplayers = this.gamemanager.helper.getPlayers().filter(p => p.disconnected == true && (Date.now() - p.dctimestamp) > 500000_000 )
+            longdcedplayers.forEach(p => p.remove())
+        },5000)
     }
 
     updateClients(){
@@ -52,7 +57,7 @@ class Server{
 
     connect(client:ServerClient){
         this.clients.add(client)
-        var players = this.gamemanager.helper.getPlayers()
+        let players = this.gamemanager.helper.getPlayers()
 
         //client does a handshake
         //if client sends sessionID look for a player with that sessionid
@@ -65,32 +70,36 @@ class Server{
         //save session and client id on client and look in database for player with sessionid = client.sessionid
         client.socket.on('handshake',(data,fn) => {
             
-            var sessionid = data.sessionid
+            let sessionid = data.sessionid
             if(sessionid == null){
                sessionid = this.sessionidcounter++
             }
 
-            var foundplayer = players.find(p => p.sessionid == sessionid)
+            let foundplayer = players.find(p => p.sessionid == sessionid)
             if(foundplayer == null){
-                //create new player
+                let player = new Player({clientid:client.id,sessionid:sessionid})
+                player.inject(this.gamemanager.helper.getPlayersNode())
+                
+            }else{
+                foundplayer.clientid = client.id
+                //reconnection dont create new player but do change the pointer to the new client
             }
 
             fn({
                 clientid:client.id,
                 sessionid:sessionid,
             })
+            this.updateClients()
         })
 
-        var player = new Player({clientid:client.id})
-        player.inject(this.gamemanager.helper.getPlayersNode())
-        this.updateClients()
+        
         
 
         client.socket.on('disconnect',() => {
-            player.disconnected = true
-            player.dctimestamp = Date.now()
-            player.remove()
-            //maybe not remove but set as dced and allow people to return via sessionid
+            var clientplayer = this.gamemanager.helper.getClientPlayer(client.id)
+
+            clientplayer.disconnected = true
+            clientplayer.dctimestamp = Date.now()
             this.clients.remove(client.id)
             this.updateClients()
         })

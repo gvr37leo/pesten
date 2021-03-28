@@ -27,9 +27,9 @@ class Client{
 
         socket.on('connect',() => {
             
-            socket.emit('handshake',{sessionid:sessionStorage.getItem('sessionid')},({ sessionid, clientid }) => {
-                localStorage.setItem('sessionid',sessionid)
-                this.sessionid = this.sessionid
+            socket.emit('handshake',{sessionid:parseInt(sessionStorage.getItem('sessionid'))},({ sessionid, clientid }) => {
+                sessionStorage.setItem('sessionid',sessionid)
+                this.sessionid = sessionid
                 this.id = clientid
             })
         })
