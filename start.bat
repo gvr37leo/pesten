@@ -1,4 +1,3 @@
-cd server
 start tsc.cmd
 start node --inspect .\mainserver.js
 

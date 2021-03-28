@@ -2,11 +2,17 @@
   "name": "pesten",
   "version": "1.0.0",
   "description": "pesten",
-  "main": "package.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "main": "mainserver.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^2.1.13",
+    "@types/node": "^14.14.35"
+  },
   "scripts": {
-    "start":"node ./server/mainserver.js"
+    "start": "node mainserver.js"
   },
   "keywords": [],
   "author": "",
