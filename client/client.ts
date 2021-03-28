@@ -26,7 +26,7 @@ class Client{
         })
 
         socket.on('connect',() => {
-            
+            console.log('connected')
             socket.emit('handshake',{sessionid:parseInt(sessionStorage.getItem('sessionid'))},({ sessionid, clientid }) => {
                 sessionStorage.setItem('sessionid',sessionid)
                 this.sessionid = sessionid

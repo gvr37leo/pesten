@@ -3,7 +3,7 @@ function RenderHomepage(props:{client:Client}){
     var game = props.client.helper.getGame()
     var players = props.client.helper.getPlayers()
     var topcard = props.client.helper.getTopCardDiscardPile()
-    var clientplayer = players.find(p => p.clientid == props.client.id)
+    var clientplayer = props.client.helper.getSessionPlayer(props.client.sessionid)
     var clientplayercards = clientplayer._children(() => true)
     var currentplayer = props.client.helper.getCurrentPlayer()
     

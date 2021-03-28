@@ -1,16 +1,16 @@
 var shown = true
 
 function MainApp(props:{client:Client}){
-    var game = client.helper.getGame()
+    var game = props.client.helper.getGame()
     var players = props.client.helper.getPlayers()
-    var clientplayer = players.find(p => p.clientid == props.client.id)
+    var sessionplayer = props.client.helper.getSessionPlayer(props.client.sessionid)
 
     return (
         <React.Fragment>
             
             {(() => {
                 //check if clientplayer has a name
-                if(clientplayer.name == ''){
+                if(sessionplayer.name == ''){
                     return <StartScreen client={props.client} />
                 }
                 if(game.status == 'started'){
@@ -43,6 +43,11 @@ function MainApp(props:{client:Client}){
                                 <button onClick={() => {
                                     props.client.output.trigger({type:'debugfinishgame',data:{}})
                                 }}>debug end game</button>
+                            </div>
+                            <div style={{marginBottom:"10px"}}>
+                                <button onClick={() => {
+                                    props.client.updateHtml()
+                                }}>rerender</button>
                             </div>
                         </React.Fragment>
                     }

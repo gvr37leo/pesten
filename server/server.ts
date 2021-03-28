@@ -82,6 +82,7 @@ class Server{
                 
             }else{
                 foundplayer.clientid = client.id
+                foundplayer.disconnected = false
                 //reconnection dont create new player but do change the pointer to the new client
             }
 
@@ -96,7 +97,11 @@ class Server{
         
 
         client.socket.on('disconnect',() => {
+            //watch out for multiple connected clients
             var clientplayer = this.gamemanager.helper.getClientPlayer(client.id)
+            //this often goes wrong for some reason
+            //maybe when multiple clients are connected the old player's clientid gets removed
+            //also goes wrong when a second tab connects and disconnects
 
             clientplayer.disconnected = true
             clientplayer.dctimestamp = Date.now()

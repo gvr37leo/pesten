@@ -47,11 +47,6 @@ io.on('connection', (socket) => {
     var client = new ServerClient(socket,idcounter++)
     server.connect(client)
 
-    // socket.emit("session", {
-    //     sessionID: socket.sessionID,
-    //     userID: socket.userID,
-    // });
-
     socket.on('disconnect', () => {
         console.log('disconnected')
     })

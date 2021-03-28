@@ -46,4 +46,8 @@ class Helper{
     getClientPlayer(clientid):Player{
         return this.getPlayers().find(p => p.clientid == clientid)
     }
+
+    getSessionPlayer(sessionid):Player{
+        return this.getPlayers().find(p => p.sessionid == sessionid)
+    }
 }
