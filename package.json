@@ -12,7 +12,6 @@
     "@types/node": "^14.14.35"
   },
   "scripts": {
-    "build": "build.bat",
     "start": "node mainserver.js"
   },
   "keywords": [],
