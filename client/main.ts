@@ -26,9 +26,14 @@
 
 //todo
 
-//heroku
-//sessions
-//bug with hanging cards in discardpile
+//heroku build
+//bug with hanging cards in discardpile something with drawing from empty deck
+//add game to hobbysite
+
+//add features/updates to libs
+//eventqueue updates
+//entity system
+//networking/sessionid system
 
 
 const socket = io({
