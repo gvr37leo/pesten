@@ -47,8 +47,12 @@ class Server{
         })
 
         setInterval(() => {
-            var longdcedplayers = this.gamemanager.helper.getPlayers().filter(p => p.disconnected == true && (Date.now() - p.dctimestamp) > 500000_000 )
-            longdcedplayers.forEach(p => p.remove())
+            var longdcedplayers = this.gamemanager.helper.getPlayers().filter(p => p.disconnected == true && (Date.now() - p.dctimestamp) > 5_000 )
+            longdcedplayers.forEach(p => {
+                console.log(`removed disconnected player:${p.name}`)
+                p.remove()
+            })
+            this.updateClients()
         },5000)
     }
 
@@ -75,6 +79,7 @@ class Server{
             if(sessionid == null){
                sessionid = this.sessionidcounter++
             }
+            this.sessionidcounter = Math.max(sessionid,this.sessionidcounter)//should create random guid instead
             client.sessionid = sessionid
             console.log(`user connected:${client.sessionid}`)
 
@@ -103,6 +108,7 @@ class Server{
             //watch out for multiple connected clients
             this.clients.remove(client.id)
             var sessionplayer = this.gamemanager.helper.getSessionPlayer(client.sessionid)
+            console.log(`user disconnected:${client.sessionid}`)
             //this often goes wrong for some reason
             //maybe when multiple clients are connected the old player's clientid gets overwritten
             //also goes wrong when a second tab connects and disconnects
