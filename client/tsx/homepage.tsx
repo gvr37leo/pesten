@@ -34,7 +34,16 @@ function RenderHomepage(props:{client:Client}){
                             <div>draw a card and pass</div>
                             <div>{props.client.helper.getDeckCards().length} remaining</div>
                         </div>
-                        <CardComp card={topcard} />
+                        <div>
+                            {
+                                (() => {
+                                    if(topcard.house.name != game.currentHouse.name){
+                                        return <div>{game.currentHouse.name}</div>
+                                    }
+                                })()
+                            }
+                            <CardComp card={topcard} />
+                        </div>
                     </div>
                 </div>
                 <div style={{display:"flex", justifyContent:"center", flexWrap:"wrap", overflow:"auto", margin:"20px", border:"1px solid white"}}>

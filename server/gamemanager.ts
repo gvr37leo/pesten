@@ -4,7 +4,7 @@ class GameManager{
     entityStore = new Store<Entity>()
     helper: Helper
     broadcastEvent = new EventSystem<{type:string,data}>()
-    sendEvent = new EventSystem<{clientid:number,type:string,data}>()
+    sendEvent = new EventSystem<{sessionid:number,type:string,data}>()
 
     constructor(){
         
@@ -13,7 +13,7 @@ class GameManager{
     setupListeners(){
 
         this.eventQueue.onRuleBroken.listen(e => {
-            this.sendEvent.trigger({type:'error',clientid:e.event.data.clientid,data:e.error})
+            this.sendEvent.trigger({type:'error',sessionid:e.event.data.sessionid,data:e.error})
         })
 
         this.eventQueue.listen('init',() => {
@@ -31,7 +31,7 @@ class GameManager{
         })
 
         this.eventQueue.listen('playerjoin', (e) => {
-            var player = this.helper.getPlayers().find(p => p.clientid == e.clientid)
+            var player = this.helper.getSessionPlayer(e.sessionid)
             player.name = e.data.name
         })
         
@@ -77,7 +77,7 @@ class GameManager{
         // })
 
         this.eventQueue.addRule('playcard',`it's not your turn`,(data) => {
-            return data.clientid == this.helper.getCurrentPlayer().clientid
+            return data.sessionid == this.helper.getCurrentPlayer().sessionid
         })
 
         this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(data) => {
@@ -156,7 +156,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('acceptcards',`it's not your turn`,(data) => {
-            return data.clientid == this.helper.getCurrentPlayer().clientid
+            return data.sessionid == this.helper.getCurrentPlayer().sessionid
         })
         this.eventQueue.listen('acceptcards',() => {
             var currentplayer = this.helper.getCurrentPlayer()
@@ -182,7 +182,7 @@ class GameManager{
 
 
         this.eventQueue.addRule('pass',`it's not your turn`,(data) => {
-            return data.clientid == this.helper.getCurrentPlayer().clientid
+            return data.sessionid == this.helper.getCurrentPlayer().sessionid
         })
         this.eventQueue.addRule('pass',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,() => {
             return this.helper.getGame().bullycounter == 0

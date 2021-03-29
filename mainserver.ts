@@ -39,7 +39,7 @@ var idcounter = 0
 var server = new Server()
 
 io.on('connection', (socket) => {
-    console.log('user connected')
+    
 
     server.onBroadcast.listen((message) => {
         io.emit('message',message)

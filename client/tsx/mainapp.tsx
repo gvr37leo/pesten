@@ -21,7 +21,7 @@ function MainApp(props:{client:Client}){
                 }
                 
             })()}
-            <div style={{position:"absolute",color:"black", top:"10px", right:"10px", padding:"20px", background:"white", borderRadius:"3px"}}>
+            <div style={{position:"absolute", border:"1px solid black", borderRadius:"3px", color:"black", top:"10px", right:"10px", padding:"20px", background:"white"}}>
                 <div>clientid:{props.client.id}</div>
                 <div>sessionid:{props.client.sessionid}</div>
                 <div style={{marginBottom:"10px"}}>

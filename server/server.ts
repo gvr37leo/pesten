@@ -1,6 +1,7 @@
 class ServerClient{
     
     output = new EventSystem<any>()
+    sessionid: number = null
 
     constructor(public socket, public id){
 
@@ -42,7 +43,7 @@ class Server{
         })
 
         this.gamemanager.sendEvent.listen((event) => {
-            this.clients.get(event.clientid).input(event.type,event.data)
+            this.clients.list().filter(c => c.sessionid == event.sessionid).forEach(c => c.input(event.type,event.data))
         })
 
         setInterval(() => {
@@ -74,6 +75,8 @@ class Server{
             if(sessionid == null){
                sessionid = this.sessionidcounter++
             }
+            client.sessionid = sessionid
+            console.log(`user connected:${client.sessionid}`)
 
             let foundplayer = players.find(p => p.sessionid == sessionid)
             if(foundplayer == null){
@@ -98,19 +101,24 @@ class Server{
 
         client.socket.on('disconnect',() => {
             //watch out for multiple connected clients
-            var clientplayer = this.gamemanager.helper.getClientPlayer(client.id)
-            //this often goes wrong for some reason
-            //maybe when multiple clients are connected the old player's clientid gets removed
-            //also goes wrong when a second tab connects and disconnects
-
-            clientplayer.disconnected = true
-            clientplayer.dctimestamp = Date.now()
             this.clients.remove(client.id)
+            var sessionplayer = this.gamemanager.helper.getSessionPlayer(client.sessionid)
+            //this often goes wrong for some reason
+            //maybe when multiple clients are connected the old player's clientid gets overwritten
+            //also goes wrong when a second tab connects and disconnects
+            // check if other clients use the same sessionid
+            
+            var connectedclients = this.clients.list().filter(c => c.sessionid == client.sessionid)
+            if(connectedclients.length == 0){
+                sessionplayer.disconnected = true
+                sessionplayer.dctimestamp = Date.now()
+            }
+            
             this.updateClients()
         })
 
         client.output.listen(e => {
-            server.input(e.type,{clientid:client.id,data:e.data})
+            server.input(e.type,{clientid:client.id,sessionid:client.sessionid,data:e.data})
         })
     }
 
