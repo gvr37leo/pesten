@@ -27,9 +27,6 @@
 //todo
 
 //heroku build
-//init state
-//bug with hanging cards in discardpile something with drawing from empty deck
-
 
 //add features/updates to libs
 //eventqueue updates
