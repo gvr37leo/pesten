@@ -34,6 +34,10 @@ class Client{
             })
         })
 
+        socket.on('disconnect',() => {
+            console.log('disconnected');
+        })
+
         socket.open()
 
     }

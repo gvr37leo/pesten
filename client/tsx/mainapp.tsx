@@ -5,6 +5,9 @@ function MainApp(props:{client:Client}){
     var players = props.client.helper.getPlayers()
     var sessionplayer = props.client.helper.getSessionPlayer(props.client.sessionid)
 
+
+    var discardpile = props.client.helper.getDiscardPile()
+    var deck = props.client.helper.getDeckContainer()
     return (
         <React.Fragment>
             
@@ -48,6 +51,10 @@ function MainApp(props:{client:Client}){
                                 <button onClick={() => {
                                     props.client.updateHtml()
                                 }}>rerender</button>
+                            </div>
+                            <div>
+                                discardpile {discardpile.children.length}<br/>
+                                deck {deck.children.length}
                             </div>
                         </React.Fragment>
                     }

@@ -27,8 +27,9 @@
 //todo
 
 //heroku build
+//init state
 //bug with hanging cards in discardpile something with drawing from empty deck
-//add game to hobbysite
+
 
 //add features/updates to libs
 //eventqueue updates
@@ -37,7 +38,7 @@
 
 
 const socket = io({
-    reconnection:false,
+    // reconnection:false,
     autoConnect: false,
 });
 

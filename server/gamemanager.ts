@@ -81,7 +81,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('playcard',`you're being bullied, either parry with a 2 or joker or accept the bullied cards`,(data) => {
-            var card = data.data
+            var card = this.helper.store.get(data.data) as Card
             if(this.helper.getGame().bullycounter > 0){
                 return card.isJoker || card.rank.name == 'two'
             }else{
@@ -90,7 +90,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('playcard','cards house or rank needs to match or the top card has to be a jack or joker',(data) => {
-            var card = data.data
+            var card = this.helper.store.get(data.data) as Card
             var topcard = this.helper.getTopCardDiscardPile()
             
             if(topcard == null){
@@ -104,7 +104,7 @@ class GameManager{
         })
 
         this.eventQueue.addRule('playcard','final card may not be a special card',(data) => {
-            var card = data.data
+            var card = this.helper.store.get(data.data) as Card
             var topcard = this.helper.getTopCardDiscardPile()
             if(topcard == null){
                 return true
@@ -123,7 +123,8 @@ class GameManager{
         
 
         this.eventQueue.listen('playcard',(data) => {
-            var card = Object.assign(new Card(),data.data) 
+
+            var card = this.helper.store.get(data.data) as Card
             var game = this.helper.getGame()
             var currentplayer = this.helper.getCurrentPlayer()
             card.setParent(this.helper.getDiscardPile())
