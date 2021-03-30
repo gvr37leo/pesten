@@ -52,7 +52,9 @@ class Server{
                 console.log(`removed disconnected player:${p.name}`)
                 p.remove()
             })
-            this.updateClients()
+            if(longdcedplayers.length > 0){
+                this.updateClients()
+            }
         },5000)
     }
 
