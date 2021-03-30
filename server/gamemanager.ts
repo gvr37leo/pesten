@@ -28,11 +28,13 @@ class GameManager{
             var deck = new Entity({name:'deck'}).inject(game)
             game.status = 'prestart'
 
+            this.eventQueue.add('gamestart',null)
         })
 
         this.eventQueue.listen('playerjoin', (e) => {
             var player = this.helper.getSessionPlayer(e.sessionid)
             player.name = e.data.name
+            this.drawCards(player,5)
         })
         
         this.eventQueue.listen('gamestart',() => {
@@ -65,7 +67,7 @@ class GameManager{
             shuffle(this.helper.getDeckContainer().children)
             var shuffleddeck = this.helper.getDeckCards()
             for(var player of players){
-                shuffleddeck.splice(0,5).forEach(card => card.setParent(player))
+                this.drawCards(player,5)
             }
             shuffleddeck.splice(0,1)[0].setParent(discardPile)
             this.helper.getGame().currentHouse = this.helper.getTopCardDiscardPile().house

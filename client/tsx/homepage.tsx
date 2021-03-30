@@ -35,13 +35,11 @@ function RenderHomepage(props:{client:Client}){
                             <div>{props.client.helper.getDeckCards().length} remaining</div>
                         </div>
                         <div>
-                            {
-                                (() => {
-                                    if(topcard.house.name != game.currentHouse.name){
-                                        return <div>{game.currentHouse.name}</div>
-                                    }
-                                })()
-                            }
+                            {(() => {
+                                if(topcard.rank.name == 'jack'){
+                                    return <div style={{textAlign:"center"}}>{game.currentHouse.name}</div>
+                                }
+                            })()}
                             <CardComp card={topcard} />
                         </div>
                     </div>
