@@ -27,7 +27,7 @@ class GameManager{
             var players = new Entity({name:'players'}).inject(game)
             var deck = new Entity({name:'deck'}).inject(game)
             game.status = 'prestart'
-
+            //flag game
             this.eventQueue.add('gamestart',null)
         })
 
