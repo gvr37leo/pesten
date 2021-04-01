@@ -6,6 +6,7 @@ class Client{
     helper: Helper
     id = null
     sessionid = null
+    lastprocessedversion = null
 
     // <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
     socket: any//socket.io socket
@@ -45,15 +46,19 @@ class Client{
     input(type,data){
         if(type == 'deltaupdate'){
             //check version number
-            data.upserts
-            data.deletions
-            data.version
+            
+            this.entityStore.applyChanges(data.deletions,data.upserts)
+            if(to(this.lastprocessedversion,data.version) >= 2){
+                //request fullupdate
+            }
+            this.lastprocessedversion = data.version
+            
         }
 
         if(type == 'update'){
             
-            data.version
-            data.data
+            
+            this.lastprocessedversion = data.version
             this.entityStore = this.deserialize(data.data)
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
