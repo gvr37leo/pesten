@@ -97,8 +97,9 @@ class Server{
             
             let sessionid = data.sessionid
             if(sessionid == null){
-               sessionid = this.sessionidcounter++
+               sessionid = this.sessionidcounter
             }
+            this.sessionidcounter++
             this.sessionidcounter = Math.max(sessionid,this.sessionidcounter)//should create random guid instead
             client.sessionid = sessionid
             console.log(`user connected:${client.sessionid}`)
@@ -141,7 +142,7 @@ class Server{
                 sessionplayer.disconnected = true
                 sessionplayer.dctimestamp = Date.now()
             }
-            
+            this.gamemanager.entityStore.flag(sessionplayer.id)
             this.updateClients()
         })
 
