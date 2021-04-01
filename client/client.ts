@@ -43,8 +43,18 @@ class Client{
     }
 
     input(type,data){
+        if(type == 'deltaupdate'){
+            //check version number
+            data.upserts
+            data.deletions
+            data.version
+        }
+
         if(type == 'update'){
-            this.entityStore = this.deserialize(data)
+            
+            data.version
+            data.data
+            this.entityStore = this.deserialize(data.data)
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
             this.updateHtml()

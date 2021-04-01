@@ -41,9 +41,6 @@ class Entity{
     type:string = ''
     name:string =''
     children:number[] = []
-    // ordercount = 0
-    // sortorder = 0
-    synced = false
 
     public constructor(init?:Partial<Entity>) {
         Object.assign(this, init);
@@ -58,7 +55,8 @@ class Entity{
         }
         this.children.push(child.id)
         child.parent = this.id
-        // child.sortorder = this.ordercount++
+        Entity.globalEntityStore.flag(child.id)
+        Entity.globalEntityStore.flag(this.id)
     }
 
     setParent(parent:Entity){
@@ -98,6 +96,7 @@ class Entity{
 
     remove(){
         remove(this.getParent().children,this.id)
+        Entity.globalEntityStore.flag(this.parent)
         Entity.globalEntityStore.remove(this.id)
         this.removeChildren()
         return this
@@ -112,6 +111,7 @@ class Entity{
     removeChildren(){
         this.descendants(() => true).forEach(e => Entity.globalEntityStore.remove(e.id))
         this.children = []
+        Entity.globalEntityStore.flag(this.id)
     }
 
     ancestor(cb:(ent:Entity) => boolean):Entity{

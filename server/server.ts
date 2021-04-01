@@ -2,6 +2,7 @@ class ServerClient{
     
     output = new EventSystem<any>()
     sessionid: number = null
+    isSynced = false
 
     constructor(public socket, public id){
 
@@ -37,9 +38,7 @@ class Server{
         })
 
         this.gamemanager.broadcastEvent.listen((event) => {
-            for(var client of this.clients.list()){
-                client.input(event.type,event.data)
-            }
+            this.updateClients()
         })
 
         this.gamemanager.sendEvent.listen((event) => {
@@ -59,7 +58,23 @@ class Server{
     }
 
     updateClients(){
-        this.gamemanager.broadcastEvent.trigger({type:'update',data:this.gamemanager.entityStore.list()})
+        //deltaupdate maybe
+        //should send an update/version number so clients can see if they missed an update
+        //or some kind of database checksum but that could be innefficient on big databases
+        var changes = this.gamemanager.entityStore.collectChanges()
+        var fulldb = this.gamemanager.entityStore.list()
+        
+        for(var client of this.clients.list()){
+            if(client.isSynced){
+                client.input('deltaupdate',changes)
+            }else{
+                client.isSynced = true
+                client.input('update',{
+                    version:changes.version,
+                    data:fulldb
+                })
+            }
+        }
     }
 
     connect(client:ServerClient){
@@ -100,6 +115,8 @@ class Server{
                 clientid:client.id,
                 sessionid:sessionid,
             })
+            //full update this client
+            //delta update others
             this.updateClients()
         })
 

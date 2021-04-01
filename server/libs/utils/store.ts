@@ -6,6 +6,7 @@ class Store<T>{
     //add some kind of version number or hash verify
     upserts = new Set<number>()
     deletions = new Set<number>()
+    versionnumber = 0
 
     get(id:number){
         return this.map.get(id)
@@ -49,6 +50,7 @@ class Store<T>{
         return {
             upserts,
             deletions,
+            version:this.versionnumber++
         }
     }
 

@@ -27,7 +27,6 @@ class GameManager{
             var players = new Entity({name:'players'}).inject(game)
             var deck = new Entity({name:'deck'}).inject(game)
             game.status = 'prestart'
-            //flag game
             this.eventQueue.add('gamestart',null)
         })
 
@@ -41,6 +40,7 @@ class GameManager{
             var game = this.helper.getGame()
             game.status = 'started'
             game.bullycounter = 0
+            
             var deck = this.helper.getDeckContainer()
             var discardPile = this.helper.getDiscardPile()
             var players = this.helper.getPlayers()
@@ -71,6 +71,7 @@ class GameManager{
             }
             shuffleddeck.splice(0,1)[0].setParent(discardPile)
             this.helper.getGame().currentHouse = this.helper.getTopCardDiscardPile().house
+            this.entityStore.flag(game.id)
         })
         
         // this.eventQueue.addRule('playcard','card is not in your hand',(data) => {
@@ -154,7 +155,7 @@ class GameManager{
                     this.incrementTurn(1)
                 }
             }
-
+            this.entityStore.flag(game.id)
             
         })
 
@@ -174,6 +175,7 @@ class GameManager{
                 this.incrementTurn(1)
             }
             game.bullycounter = 0
+            this.entityStore.flag(game.id)
         })
 
 
@@ -210,6 +212,7 @@ class GameManager{
                     game.winnerplayerid = player.id
                 }
             }
+            this.entityStore.flag(game.id)
         })
 
         this.eventQueue.listen('debugfinishgame',() => {
@@ -217,6 +220,7 @@ class GameManager{
             game.status = 'finished'
             var firstplayer = this.helper.getPlayers()[0]
             game.winnerplayerid = firstplayer.id
+            this.entityStore.flag(game.id)
         })
     }
 
@@ -244,16 +248,19 @@ class GameManager{
         game.turnindex = (game.turnindex + count) % this.helper.getPlayers().length
 
         this.eventQueue.add('turnstart',this.helper.getCurrentPlayer().id)
+        this.entityStore.flag(game.id)
     }
     
     chooseHouse(player:Player,cb:(house:House) => void){
         
         player.isDiscoveringHouse = true
         player.discoverHouseOptions = Object.values(houseMap)
+        this.entityStore.flag(player.id)
 
         this.eventQueue.startDiscovery('discoverhouse',player,(data) => {
             player.isDiscoveringHouse = false
             player.discoverHouseOptions = []
+            this.entityStore.flag(player.id)
             cb(data)
         })
     }
