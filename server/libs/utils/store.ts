@@ -41,16 +41,27 @@ class Store<T>{
     }
 
     collectChanges(){
-        var upserts = Array.from(this.upserts.entries()).map(e => this.get(e[0]))
+        for(var deletion of this.deletions){
+            if(this.upserts.has(deletion)){
+                this.deletions.delete(deletion)
+                this.upserts.delete(deletion)
+            }
+        }
         var deletions = Array.from(this.deletions.keys())
+        var upserts = Array.from(this.upserts.entries()).map(e => this.get(e[0]))
         this.upserts.clear()
         this.deletions.clear()
-        //add some kind of version number or hash verify
+        var temp = this.versionnumber
+        if(upserts.length > 0 || deletions.length > 0){
+            this.versionnumber++
+        }
+
+
         //optimization potential: if delete id present in upserts cancel them both out
         return {
             upserts,
             deletions,
-            version:this.versionnumber++
+            version:temp
         }
     }
 
@@ -59,6 +70,7 @@ class Store<T>{
             var local = this.get(upsert.id)
             if(local == null){
                 this.insert(upsert)
+                upsert.__proto__ = Entity.prototype
             }else{
                 Object.assign(local,upsert)
             }

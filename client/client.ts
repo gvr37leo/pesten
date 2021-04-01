@@ -46,18 +46,19 @@ class Client{
     input(type,data){
         if(type == 'deltaupdate'){
             //check version number
-            
+            console.log('delta update')
             this.entityStore.applyChanges(data.deletions,data.upserts)
             if(to(this.lastprocessedversion,data.version) >= 2){
                 //request fullupdate
+                console.log(`request full update ${this.lastprocessedversion} -> ${data.version}`)
             }
             this.lastprocessedversion = data.version
-            
+            this.updateHtml()
         }
 
         if(type == 'update'){
             
-            
+            console.log('full update')
             this.lastprocessedversion = data.version
             this.entityStore = this.deserialize(data.data)
             Entity.globalEntityStore = this.entityStore

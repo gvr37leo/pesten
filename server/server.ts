@@ -38,7 +38,7 @@ class Server{
         })
 
         this.gamemanager.broadcastEvent.listen((event) => {
-            this.updateClients()
+            // this.updateClients()
         })
 
         this.gamemanager.sendEvent.listen((event) => {
@@ -61,12 +61,15 @@ class Server{
         //deltaupdate maybe
         //should send an update/version number so clients can see if they missed an update
         //or some kind of database checksum but that could be innefficient on big databases
+        
         var changes = this.gamemanager.entityStore.collectChanges()
         var fulldb = this.gamemanager.entityStore.list()
         
         for(var client of this.clients.list()){
             if(client.isSynced){
-                client.input('deltaupdate',changes)
+                if(changes.deletions.length > 0 || changes.upserts.length > 0){
+                    client.input('deltaupdate',changes)
+                }
             }else{
                 client.isSynced = true
                 client.input('update',{

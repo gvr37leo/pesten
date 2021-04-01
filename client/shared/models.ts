@@ -52,6 +52,7 @@ class Entity{
         var oldparent = Entity.globalEntityStore.get(child.parent)
         if(oldparent != null){
             remove(oldparent.children,child.id)
+            Entity.globalEntityStore.flag(oldparent.id)
         }
         this.children.push(child.id)
         child.parent = this.id

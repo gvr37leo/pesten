@@ -6,6 +6,7 @@ class Store<T>{
     //add some kind of version number or hash verify
     upserts = new Set<number>()
     deletions = new Set<number>()
+    versionnumber = 0
 
     get(id:number){
         return this.map.get(id)
@@ -44,11 +45,15 @@ class Store<T>{
         var deletions = Array.from(this.deletions.keys())
         this.upserts.clear()
         this.deletions.clear()
-        //add some kind of version number or hash verify
+        var temp = this.versionnumber
+        if(upserts.length > 0 || deletions.length > 0){
+            this.versionnumber++
+        }
         //optimization potential: if delete id present in upserts cancel them both out
         return {
             upserts,
             deletions,
+            version:temp
         }
     }
 
@@ -57,6 +62,7 @@ class Store<T>{
             var local = this.get(upsert.id)
             if(local == null){
                 this.insert(upsert)
+                upsert.__proto__ = Entity.prototype
             }else{
                 Object.assign(local,upsert)
             }
