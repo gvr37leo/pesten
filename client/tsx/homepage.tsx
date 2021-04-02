@@ -6,7 +6,7 @@ function RenderHomepage(props:{client:Client}){
     var clientplayer = props.client.helper.getSessionPlayer(props.client.sessionid)
     var clientplayercards = clientplayer._children(() => true)
     var currentplayer = props.client.helper.getCurrentPlayer()
-    
+
     return (
         <React.Fragment>
             <div style={{display:"flex",flexDirection:"column", minHeight:"100vh", justifyContent:"space-between"}}>

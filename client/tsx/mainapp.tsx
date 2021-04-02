@@ -4,13 +4,20 @@ function MainApp(props:{client:Client}){
     var game = props.client.helper.getGame()
     var players = props.client.helper.getPlayers()
     var sessionplayer = props.client.helper.getSessionPlayer(props.client.sessionid)
-
-
     var discardpile = props.client.helper.getDiscardPile()
     var deck = props.client.helper.getDeckContainer()
+
+    var imagemap = {}
+    props.client.helper.store.list().filter(e => e.type == 'card').forEach((c:any,i) => {
+        imagemap[c.url] = <img key={i} style={{display:"none"}} src={c.url}></img>
+    })
     return (
         <React.Fragment>
-            
+            {(() => {
+                return Object.entries(imagemap).map(entry => {
+                    return entry[1]
+                })
+            })()}
             {(() => {
                 //check if clientplayer has a name
                 if(sessionplayer.name == ''){
