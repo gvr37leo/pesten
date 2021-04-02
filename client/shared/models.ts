@@ -68,6 +68,11 @@ class Entity{
         }
     }
 
+    set(obj:any){
+        Entity.globalEntityStore.flag(this.id)
+        Object.assign(this,obj)
+    }
+
     getParent(){
         return Entity.globalEntityStore.get(this.parent)
     }
