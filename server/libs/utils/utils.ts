@@ -177,8 +177,8 @@ function round(number,decimals){
     return Math.round(number *  mul) / mul
 }
 
-var rng = new RNG(0)
-function shuffle<T>(array:T[]){
+
+function shuffle<T>(array:T[],rng:RNG){
     var currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
         randomIndex = Math.floor(rng.norm() * currentIndex);

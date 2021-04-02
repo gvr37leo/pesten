@@ -5,6 +5,7 @@ class GameManager{
     helper: Helper
     broadcastEvent = new EventSystem<{type:string,data}>()
     sendEvent = new EventSystem<{sessionid:number,type:string,data}>()
+    rng = new RNG(Math.floor(Math.random() * 100000))
 
     constructor(){
         
@@ -64,7 +65,7 @@ class GameManager{
             new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
             new Card({isJoker:true,url:`./resources/joker.jpg`}).inject(deck)
 
-            shuffle(this.helper.getDeckContainer().children)
+            shuffle(this.helper.getDeckContainer().children,this.rng)
             var shuffleddeck = this.helper.getDeckCards()
             for(var player of players){
                 this.drawCards(player,5)
