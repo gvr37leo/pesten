@@ -947,7 +947,7 @@ var rankMap = {
     jack: new Rank('jack', 'J'),
     queen: new Rank('queen', 'Q'),
     king: new Rank('king', 'K'),
-    ace: new Rank('ace', 'A'),
+    ace: new Rank('ace', 'S'),
 };
 var houseMap = {
     spades: new House('spades', 'black', 'S'),
