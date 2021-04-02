@@ -53,6 +53,12 @@ function MainApp(props:{client:Client}){
                                     props.client.updateHtml()
                                 }}>rerender</button>
                             </div>
+                            <div style={{marginBottom:"10px"}}>
+                                <button onClick={() => {
+                                    props.client.output.trigger({type:'requestfullupdate',data:{}})
+                                }}>request full update</button>
+                            </div>
+
                             <div>
                                 discardpile {discardpile.children.length}<br/>
                                 deck {deck.children.length}

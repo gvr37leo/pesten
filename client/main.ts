@@ -25,6 +25,8 @@
 
 
 //todo
+//preload images
+//request full update
 
 //heroku build
 

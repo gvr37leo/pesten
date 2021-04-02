@@ -49,7 +49,7 @@ class Client{
             console.log('delta update')
             this.entityStore.applyChanges(data.deletions,data.upserts)
             if(to(this.lastprocessedversion,data.version) >= 2){
-                //request fullupdate
+                this.output.trigger({type:'requestfullupdate',data:{}})
                 console.log(`request full update ${this.lastprocessedversion} -> ${data.version}`)
             }
             this.lastprocessedversion = data.version
@@ -63,6 +63,10 @@ class Client{
             this.entityStore = this.deserialize(data.data)
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
+            this.entityStore.list().filter(e => e.type == 'card').forEach((c:any) => {
+                var img=new Image();
+                img.src=c.url;
+            })
             this.updateHtml()
         }
 

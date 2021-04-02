@@ -38,7 +38,7 @@ class Server{
         })
 
         this.gamemanager.broadcastEvent.listen((event) => {
-            // this.updateClients()
+            this.clients.list().forEach(c => c.input(event.type,event.data))
         })
 
         this.gamemanager.sendEvent.listen((event) => {
@@ -73,7 +73,7 @@ class Server{
             }else{
                 client.isSynced = true
                 client.input('update',{
-                    version:changes.version,
+                    version:this.gamemanager.entityStore.versionnumber,
                     data:fulldb
                 })
             }
@@ -119,8 +119,6 @@ class Server{
                 clientid:client.id,
                 sessionid:sessionid,
             })
-            //full update this client
-            //delta update others
             this.updateClients()
         })
 
@@ -156,7 +154,6 @@ class Server{
     }
 
     serialize(){
-        //only serialize unsynced entitys
         return JSON.stringify(this.gamemanager.entityStore.list())
     }
 

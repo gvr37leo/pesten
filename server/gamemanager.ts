@@ -222,6 +222,14 @@ class GameManager{
             game.winnerplayerid = firstplayer.id
             this.entityStore.flag(game.id)
         })
+
+        this.eventQueue.listen('requestfullupdate',(data) => {
+            this.entityStore.list()
+            this.sendEvent.trigger({sessionid:data.sessionid,type:'update',data:{
+                version:this.entityStore.versionnumber,
+                data:this.entityStore.list()
+            }})
+        })
     }
 
     drawCards(player:Player,count:number){

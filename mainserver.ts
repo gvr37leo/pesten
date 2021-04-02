@@ -2,7 +2,7 @@
 
 /// <reference path="server/libs/vector/vector.ts" />
 /// <reference path="server/libs/utils/rng.ts" />
-/// <reference path="server/libs/utils/store.ts" />
+/// <reference path="client/libs/utils/store.ts" />
 /// <reference path="server/libs/utils/table.ts" />
 /// <reference path="server/libs/utils/utils.ts" />
 /// <reference path="server/libs/utils/stopwatch.ts" />
