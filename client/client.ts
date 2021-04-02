@@ -63,10 +63,6 @@ class Client{
             this.entityStore = this.deserialize(data.data)
             Entity.globalEntityStore = this.entityStore
             this.helper = new Helper(this.entityStore)
-            this.entityStore.list().filter(e => e.type == 'card').forEach((c:any) => {
-                var img=new Image();
-                img.src=c.url;
-            })
             this.updateHtml()
         }
 
