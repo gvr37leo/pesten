@@ -42,7 +42,6 @@ function MainApp(props:{client:Client}){
                 {(() => {
                     if(shown){
                         return <React.Fragment>
-                            
                             <div style={{marginBottom:"10px"}}>
                                 <button onClick={() => {
                                     props.client.output.trigger({type:'gamestart',data:{}})
@@ -71,9 +70,6 @@ function MainApp(props:{client:Client}){
                         </React.Fragment>
                     }
                 })()}
-                
-
-
             </div>
         </React.Fragment>
         
