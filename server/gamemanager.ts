@@ -41,6 +41,7 @@ class GameManager{
             var game = this.helper.getGame()
             game.status = 'started'
             game.bullycounter = 0
+            game.turnindex = 0
             
             var deck = this.helper.getDeckContainer()
             var discardPile = this.helper.getDiscardPile()
@@ -240,7 +241,7 @@ class GameManager{
             if(topcard == null){
                 var discardcards = this.helper.getDiscardPile()._children(e => true)
                 var exceptlast = discardcards.slice(0,discardcards.length - 1)
-                shuffle(exceptlast).forEach(c => c.setParent(deckcontainer))
+                shuffle(exceptlast,this.rng).forEach(c => c.setParent(deckcontainer))
                 var topcard = this.helper.getTopCardDeck()
                 if(topcard != null){
                     topcard.setParent(player)

@@ -25,8 +25,8 @@
 
 
 //todo
-//preload images
-//request full update
+//mobile
+//event when skipped
 
 //heroku build
 
@@ -58,25 +58,3 @@ function renderHTML(){
 //updates to librarys
 //discovery in eventqueue
 //bugfix in eventsystem
-// var server = new Server()
-
-// var clients = [new Client(),new Client()]
-// var currentclientI = 0
-
-
-
-
-
-
-
-
-
-
-// document.addEventListener('keydown',e => {
-//     if(e.key =='q'){
-//         currentclientI = (currentclientI + 1) % clients.length
-//         renderHTML()
-//     }
-// })
-
-
