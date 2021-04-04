@@ -1,4 +1,4 @@
-var shown = true
+var shown = false
 
 function MainApp(props:{client:Client}){
     var game = props.client.helper.getGame()
@@ -32,9 +32,7 @@ function MainApp(props:{client:Client}){
                 
             })()}
             <div style={{position:"absolute", border:"1px solid black", borderRadius:"3px", color:"black", top:"10px", right:"10px", padding:"20px", background:"white"}}>
-                <div>clientid:{props.client.id}</div>
-                <div>sessionid:{props.client.sessionid}</div>
-                <div>dbversion:{props.client.lastprocessedversion}</div>
+                <div>debug panel</div>
                 <div style={{marginBottom:"10px"}}>
                     <button onClick={() => {
                         shown = !shown
@@ -45,6 +43,7 @@ function MainApp(props:{client:Client}){
                 {(() => {
                     if(shown){
                         return <React.Fragment>
+                            
                             <div style={{marginBottom:"10px"}}>
                                 <button onClick={() => {
                                     props.client.output.trigger({type:'gamestart',data:{}})
@@ -53,7 +52,7 @@ function MainApp(props:{client:Client}){
                             <div style={{marginBottom:"10px"}}>
                                 <button onClick={() => {
                                     props.client.output.trigger({type:'debugfinishgame',data:{}})
-                                }}>debug end game</button>
+                                }}>end game</button>
                             </div>
                             <div style={{marginBottom:"10px"}}>
                                 <button onClick={() => {
@@ -65,11 +64,11 @@ function MainApp(props:{client:Client}){
                                     props.client.output.trigger({type:'requestfullupdate',data:{}})
                                 }}>request full update</button>
                             </div>
-
-                            <div>
-                                discardpile {discardpile.children.length}<br/>
-                                deck {deck.children.length}
-                            </div>
+                            <div>clientid:{props.client.id}</div>
+                            <div>sessionid:{props.client.sessionid}</div>
+                            <div>dbversion:{props.client.lastprocessedversion}</div>
+                            <div>discardpile:{discardpile.children.length}</div>
+                            <div>deck:{deck.children.length}</div>
                         </React.Fragment>
                     }
                 })()}
