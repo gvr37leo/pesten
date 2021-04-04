@@ -7,17 +7,16 @@ function MainApp(props:{client:Client}){
     var discardpile = props.client.helper.getDiscardPile()
     var deck = props.client.helper.getDeckContainer()
 
-    var imagemap = {}
-    props.client.helper.store.list().filter(e => e.type == 'card').forEach((c:any,i) => {
-        imagemap[c.url] = <img key={i} style={{display:"none"}} src={c.url}></img>
-    })
+
     return (
         <React.Fragment>
-            {(() => {
-                return Object.entries(imagemap).map(entry => {
-                    return entry[1]
-                })
-            })()}
+            <div>
+                {(() => {
+                    return props.client.helper.store.list().filter(e => e.type == 'card').map((c:any,i) => {
+                        return <img key={i} style={{display:"none"}} src={c.url}></img>
+                    })
+                })()}
+            </div>
             {(() => {
                 //check if clientplayer has a name
                 if(sessionplayer.name == ''){
@@ -31,7 +30,7 @@ function MainApp(props:{client:Client}){
                 }
                 
             })()}
-            <div style={{position:"absolute", border:"1px solid black", borderRadius:"3px", color:"black", top:"10px", right:"10px", padding:"20px", background:"white"}}>
+            <div style={{position:"absolute", border:"1px solid black", borderRadius:"3px", color:"black", top:"10px", left:"10px", padding:"20px", background:"white"}}>
                 <div>debug panel</div>
                 <div style={{marginBottom:"10px"}}>
                     <button onClick={() => {

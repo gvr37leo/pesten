@@ -16,7 +16,7 @@ function RenderHomepage(props:{client:Client}){
                         
                         }} key={p.id} player={p} />)}
                     </div>
-                    <div style={{flexGrow:'1',display:'flex',justifyContent:'center', alignItems:"center"}}>
+                    <div style={{flexGrow:'1',display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:"center"}}>
 
                         {(() => {
                             if(game.bullycounter > 0 && clientplayer.id == currentplayer.id){
