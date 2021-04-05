@@ -34,10 +34,10 @@ function RenderHomepage(props:{client:Client}){
                             <div>draw a card and pass</div>
                             <div>{props.client.helper.getDeckCards().length} remaining</div>
                         </div>
-                        <div>
+                        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                             {(() => {
                                 if(topcard.rank.name == 'jack'){
-                                    return <div style={{textAlign:"center"}}>{game.currentHouse.name}</div>
+                                    return <img width="40" style={{background:'white',borderRadius:'3px'}} src={game.currentHouse.iconuri}/>
                                 }
                             })()}
                             <CardComp card={topcard} />

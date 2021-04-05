@@ -5,7 +5,7 @@ class Rank{
 }
 
 class House{
-    constructor(public name:string, public color:string,public abbr:string){
+    constructor(public name:string, public color:string,public abbr:string,public iconuri:string){
 
     }
 }
@@ -27,10 +27,10 @@ var rankMap = {
 }
 
 var houseMap = {
-    spades:new House('spades','black','S'),
-    clubs:new House('clubs','black','C'),
-    diamonds:new House('diamonds','red','D'),
-    hearts:new House('hearts','red','H'),
+    spades:new House('spades','black','S','/resources/spades.png'),
+    clubs:new House('clubs','black','C','/resources/clubs.png'),
+    diamonds:new House('diamonds','red','D','/resources/diamonds.png'),
+    hearts:new House('hearts','red','H','/resources/hearts.png'),
 }
 
 class Entity{
