@@ -66,6 +66,14 @@ class Client{
             this.updateHtml()
         }
 
+        if(type == 'turnstart'){
+            var selfplayer = this.helper.getClientPlayer(this.id)
+            if(selfplayer.id == data){
+                navigator.vibrate(500)
+                toastr.success('your turn')
+            }
+        }
+
         if(type == 'error'){
             toastr.error(data)
         }
